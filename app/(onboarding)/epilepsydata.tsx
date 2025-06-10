@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-export default function TabsLayout() {
+export default function EpilepsyData() {
   return (
     <View>
-      <Text>TabsLayout</Text>
+      <Text>EpilepsyData</Text>
     </View>
   );
 }

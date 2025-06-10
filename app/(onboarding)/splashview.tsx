@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-export default function TabsLayout() {
+export default function SplashView() {
   return (
     <View>
-      <Text>TabsLayout</Text>
+      <Text style={{ color: "red" }}>splashscreen</Text>
     </View>
   );
 }

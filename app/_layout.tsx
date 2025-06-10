@@ -1,29 +1,41 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useFonts } from "expo-font";
+import { Slot, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import "react-native-reanimated";
+import SplashView from "./(onboarding)/splashview";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  const router = useRouter();
+
+  const [fontsLoaded] = useFonts({
+    ManropeBold: require("../assets/fonts/Manrope-Bold.ttf"),
+    ManropeExtraBold: require("../assets/fonts/Manrope-ExtraBold.ttf"),
+    ManropeExtraLight: require("../assets/fonts/Manrope-ExtraLight.ttf"),
+    ManropeLight: require("../assets/fonts/Manrope-Light.ttf"),
+    ManropeMedium: require("../assets/fonts/Manrope-Medium.ttf"),
+    ManropeRegular: require("../assets/fonts/Manrope-Regular.ttf"),
+    ManropeSemiBold: require("../assets/fonts/Manrope-SemiBold.ttf"),
   });
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
+  const [timeoutDone, setTimeoutDone] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeoutDone(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (fontsLoaded && timeoutDone) {
+      router.replace("/(onboarding)/welcome");
+    }
+  }, [fontsLoaded, timeoutDone]);
+
+  if (!fontsLoaded || !timeoutDone) {
+    return <SplashView />;
   }
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+  return <Slot />;
 }
