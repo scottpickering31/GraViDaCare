@@ -1,75 +1,37 @@
+import ButtonComponent from "@/components/buttons/ButtonComponent";
+import OnBoardingTemplate from "@/components/ui/onboarding/onboardingtempate";
 import { Colors } from "@/constants/Colors";
-import { router } from "expo-router";
+import { ONBOARDING_PAGES } from "@/constants/onBoardingPages";
+import { useOnboardingNavigation } from "@/hooks/useOnboardingNavigation";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import ButtonComponent from "../../components/buttons/ButtonComponent";
 
 export default function Welcome() {
-  return (
-    <View>
-      <Image
-        source={require("../../assets/illustration.png")}
-        style={{ width: "100%", height: "65%" }}
-      />
-      <View
-        style={{
-          justifyContent: "center",
-          flexDirection: "column",
-          padding: 20,
-          flex: 1,
-          position: "relative",
-        }}
-      >
-        <View
-          style={{
-            position: "absolute",
-            flexDirection: "row",
-            width: "55%",
-            top: 0,
-            padding: 20,
-            gap: 7,
-          }}
-        >
-          <View style={styles.line} />
-          <View style={styles.line} />
-          <View style={styles.line} />
-        </View>
-        <Text style={{ fontSize: 30, fontWeight: "bold" }}>Welcome!</Text>
-        <Text>
-          We will assist you in efficiently and easily scheduling appointments
-          with doctors. Let's get started!
-        </Text>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
+  const { goNext, skip } = useOnboardingNavigation("welcome");
 
-          justifyContent: "space-around",
-          alignItems: "flex-end",
-        }}
-      >
-        <ButtonComponent
-          title="Skip"
-          onPress={() => {
-            router.replace("/(onboarding)/epilepsydata");
-          }}
-        />
-        <ButtonComponent
-          title="Next"
-          onPress={() => {
-            router.replace("/(onboarding)/epilepsydata");
-          }}
-        />
-      </View>
-    </View>
+  return (
+    <OnBoardingTemplate
+      text="Welcome to Gravicare"
+      heading="Welcome"
+      imageSource={require("@/assets/illustration.png")}
+      pages={ONBOARDING_PAGES}
+      currentPage="welcome"
+    >
+      <ButtonComponent
+        title="Skip"
+        onPress={skip}
+        borderWidth={1}
+        borderColor={Colors.gray[200]}
+        backgroundColor={Colors.gray[50]}
+        textColor="black"
+        width={"45%"}
+      />
+      <ButtonComponent
+        title="Next"
+        onPress={goNext}
+        textColor="white"
+        backgroundColor={Colors.primary[500]}
+        width={"45%"}
+      />
+    </OnBoardingTemplate>
   );
 }
-
-const styles = StyleSheet.create({
-  line: {
-    height: 4,
-    backgroundColor: Colors.primary[500],
-    borderRadius: 90,
-    width: 42,
-  },
-});

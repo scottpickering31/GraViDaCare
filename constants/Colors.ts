@@ -1,8 +1,4 @@
 export const Colors = {
-  base: {
-    white: "#fff",
-    black: "#000",
-  },
   typography: {
     "50": "#fdfdfd",
     "100": "#f7f7f7",
