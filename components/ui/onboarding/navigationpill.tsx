@@ -32,9 +32,9 @@ export default function NavigationPill({
 const styles = StyleSheet.create({
   pillContainer: {
     flexDirection: "row",
-    justifyContent: "center",
     gap: 8,
-    marginVertical: 12,
+    paddingHorizontal: 20,
+    position: "absolute",
   },
   line: {
     height: 4,
