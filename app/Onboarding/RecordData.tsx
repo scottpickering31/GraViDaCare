@@ -1,7 +1,7 @@
-import ButtonComponent from "@/components/buttons/ButtonComponent";
-import OnBoardingTemplate from "@/components/ui/onboarding/onboardingtempate";
-import { Colors } from "@/constants/Colors";
+import ButtonComponent from "@/components/Buttons/ButtonComponent";
+import OnBoardingTemplate from "@/components/ui/Onboarding/OnboardingTemplate";
 import { ONBOARDING_PAGES } from "@/constants/onBoardingPages";
+import { Colors } from "@/constants/styles/Colors";
 import { router } from "expo-router";
 import React from "react";
 
@@ -12,10 +12,10 @@ export default function RecordData() {
       heading="Record Data"
       imageSource={require("@/assets/illustration(2).png")}
       pages={ONBOARDING_PAGES}
-      currentPage="recorddata"
+      currentPage="RecordData"
     >
       <ButtonComponent
-        onPress={() => router.push("/auth/register")}
+        onPress={() => router.push("/Onboarding/OnboardingRegister")}
         title="Get Started !"
         textColor="white"
         backgroundColor={Colors.primary[500]}

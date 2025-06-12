@@ -9,7 +9,7 @@ export const Colors = {
     "600": "#52525B",
     "700": "#3F3F46",
     "800": "#27272A",
-    "900": "#254EDB", // opacity removed since it was separate
+    "900": "#1E3EAF",
   },
   gray: {
     "50": "#F9FAFB",

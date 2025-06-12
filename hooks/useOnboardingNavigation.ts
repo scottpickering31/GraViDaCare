@@ -11,8 +11,8 @@ export function useOnboardingNavigation(currentPage: string) {
   return {
     goNext: () =>
       isLast
-        ? router.push("/(tabs)/dashboard")
-        : router.push(`../(onboarding)/${nextPage}`),
-    skip: () => router.push("/(tabs)/dashboard"),
+        ? router.push("/(tabs)/Dashboard")
+        : router.push(`../Onboarding/${nextPage}`),
+    skip: () => router.push("/Onboarding/OnboardingRegister"),
   };
 }

@@ -1,20 +1,20 @@
-import ButtonComponent from "@/components/buttons/ButtonComponent";
-import OnBoardingTemplate from "@/components/ui/onboarding/onboardingtempate";
-import { Colors } from "@/constants/Colors";
+import ButtonComponent from "@/components/Buttons/ButtonComponent";
+import OnBoardingTemplate from "@/components/ui/Onboarding/OnboardingTemplate";
 import { ONBOARDING_PAGES } from "@/constants/onBoardingPages";
+import { Colors } from "@/constants/styles/Colors";
 import { useOnboardingNavigation } from "@/hooks/useOnboardingNavigation";
+
 import React from "react";
 
-export default function Welcome() {
-  const { goNext, skip } = useOnboardingNavigation("welcome");
-
+export default function EpilepsyData() {
+  const { goNext, skip } = useOnboardingNavigation("EpilepsyData");
   return (
     <OnBoardingTemplate
-      text="Welcome to Gravicare"
-      heading="Welcome"
-      imageSource={require("@/assets/illustration.png")}
+      text="Epilepsy Data is here for you"
+      heading="Epilepsy Data"
+      imageSource={require("@/assets/illustration(1).png")}
       pages={ONBOARDING_PAGES}
-      currentPage="welcome"
+      currentPage="EpilepsyData"
     >
       <ButtonComponent
         title="Skip"

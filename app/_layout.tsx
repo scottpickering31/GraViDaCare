@@ -2,7 +2,7 @@ import { useFonts } from "expo-font";
 import { Slot, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
-import SplashView from "./(onboarding)/splashview";
+import SplashView from "./Onboarding/SplashView";
 
 export default function RootLayout() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (fontsLoaded && timeoutDone) {
-      router.replace("/(onboarding)/welcome");
+      router.replace("/Onboarding/Welcome");
     }
   }, [fontsLoaded, timeoutDone]);
 
