@@ -1,7 +1,7 @@
 import ButtonComponent from "@/components/Buttons/ButtonComponent";
 import OnBoardingTemplate from "@/components/ui/Onboarding/OnboardingTemplate";
-import { ONBOARDING_PAGES } from "@/constants/onBoardingPages";
 import { Colors } from "@/constants/styles/Colors";
+import { ONBOARDING_PAGES } from "@/constants/onBoardingPages";
 import { useOnboardingNavigation } from "@/hooks/useOnboardingNavigation";
 import React from "react";
 

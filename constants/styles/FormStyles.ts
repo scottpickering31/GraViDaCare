@@ -4,12 +4,10 @@ export const FormInputStyles = StyleSheet.create({
   input: {
     color: "#fff",
     borderWidth: 1,
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
+    borderRadius: 8,
     borderBottomColor: "#bfbfbf",
-    paddingVertical: 8,
-    textAlign: "center",
     width: "100%",
+    backgroundColor: "white",
+    textAlign: "left",
   },
 });

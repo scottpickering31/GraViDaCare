@@ -1,12 +1,6 @@
 import React from "react";
-import {
-  Image,
-  ImageSourcePropType,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { SvgProps } from "react-native-svg";
 
 interface ButtonComponentProps {
   onPress: () => void;
@@ -16,7 +10,7 @@ interface ButtonComponentProps {
   borderColor?: string;
   borderWidth?: number;
   width: `${number}%`;
-  icon?: ImageSourcePropType;
+  icon?: React.FC<SvgProps>;
 }
 
 export default function ButtonComponent({
@@ -27,23 +21,23 @@ export default function ButtonComponent({
   borderColor,
   borderWidth,
   width,
-  icon,
+  icon: Icon,
 }: ButtonComponentProps) {
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: backgroundColor,
-          borderWidth: borderWidth,
-          borderColor: borderColor,
-          width: width,
+          backgroundColor,
+          borderWidth,
+          borderColor,
+          width,
         },
       ]}
     >
       <Pressable onPress={onPress} style={styles.pressable}>
         <View style={styles.content}>
-          {icon && <Image source={icon} style={styles.icon} />}
+          {Icon && <Icon width={20} height={20} />}
           <Text
             style={[
               styles.text,
@@ -63,7 +57,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 14,
     borderRadius: 8,
-
     alignItems: "center",
     justifyContent: "center",
   },
@@ -75,11 +68,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 12,
-  },
-  icon: {
-    width: 24,
-    height: 24,
-    resizeMode: "contain",
   },
   text: {
     fontSize: 14,
