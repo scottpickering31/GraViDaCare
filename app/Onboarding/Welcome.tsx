@@ -10,7 +10,7 @@ export default function Welcome() {
 
   return (
     <OnBoardingTemplate
-      text="Welcome to Gravicare"
+      text="Welcome to Gravidacare"
       heading="Welcome"
       imageSource={require("@/assets/illustration.png")}
       pages={ONBOARDING_PAGES}

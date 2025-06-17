@@ -60,7 +60,7 @@ export default function OnBoardingRegister() {
             }}
           >
             Register with{" "}
-            <Text style={{ color: Colors.primary[500] }}>GraViCare</Text>
+            <Text style={{ color: Colors.primary[500] }}>GraViDaCare</Text>
           </Text>
           <Text
             style={{
@@ -131,6 +131,7 @@ export default function OnBoardingRegister() {
                   </View>
                 )}
               />
+
               <ButtonComponent
                 backgroundColor={Colors.primary[500]}
                 width={"100%"}
@@ -138,16 +139,18 @@ export default function OnBoardingRegister() {
                 onPress={handleSubmit(submitEmail)}
                 title="Sign up"
               />
-              <ButtonComponent
-                backgroundColor={Colors.gray[50]}
-                width={"100%"}
-                textColor="black"
-                onPress={() => setShowEmailModule(false)}
-                title="Back"
-                borderColor="black"
-                icon={NavArrow}
-                borderWidth={1}
-              />
+              <View style={{ width: "100%", marginTop: 32 }}>
+                <ButtonComponent
+                  backgroundColor={Colors.gray[50]}
+                  width={"100%"}
+                  textColor="black"
+                  onPress={() => setShowEmailModule(false)}
+                  title="Back"
+                  borderColor="black"
+                  icon={NavArrow}
+                  borderWidth={1}
+                />
+              </View>
             </View>
           )}
 
@@ -203,8 +206,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
     backgroundColor: "white",
-    paddingHorizontal: 24,
-    paddingVertical: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 6,
     borderRadius: 8,
     borderWidth: 1,
     width: "100%",
