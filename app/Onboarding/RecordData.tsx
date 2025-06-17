@@ -15,7 +15,7 @@ export default function RecordData() {
       currentPage="RecordData"
     >
       <ButtonComponent
-        onPress={() => router.push("/Onboarding/OnboardingRegister")}
+        onPress={() => router.push("/Onboarding/GetStarted")}
         title="Get Started !"
         textColor="white"
         backgroundColor={Colors.primary[500]}

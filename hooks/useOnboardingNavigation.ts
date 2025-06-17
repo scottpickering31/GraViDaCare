@@ -13,6 +13,6 @@ export function useOnboardingNavigation(currentPage: string) {
       isLast
         ? router.push("/(tabs)/Dashboard")
         : router.push(`../Onboarding/${nextPage}`),
-    skip: () => router.replace("/Onboarding/OnboardingRegister"),
+    skip: () => router.replace("/Onboarding/GetStarted"),
   };
 }

@@ -8,7 +8,7 @@ export default function OnboardingLayout() {
       <Stack.Screen name="EpilepsyData" options={{ headerShown: false }} />
       <Stack.Screen name="RecordData" options={{ headerShown: false }} />
       <Stack.Screen
-        name="OnboardingRegister"
+        name="GetStarted"
         options={{ headerShown: false }}
       />
     </Stack>

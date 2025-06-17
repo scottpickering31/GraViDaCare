@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "GraViDaCare",
-    "slug": "GraViDaCare",
+    "name": "GraVidaCare",
+    "slug": "GraVidaCare",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

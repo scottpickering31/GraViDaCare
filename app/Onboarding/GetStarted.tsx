@@ -3,11 +3,12 @@ import GoogleLogo from "@/assets/icons/GoogleLogo.svg";
 import NavArrow from "@/assets/icons/NavArrow.svg";
 import ButtonComponent from "@/components/Buttons/ButtonComponent";
 import { Colors } from "@/constants/styles/Colors";
+import { supabase } from "@/lib/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { z } from "zod";
 import EmailIcon from "../../assets/icons/EmailIcon.svg";
 
@@ -15,23 +16,38 @@ const emailSchema = z.object({
   email: z.string().email("Enter a valid email"),
 });
 
-type FormData = z.infer<typeof emailSchema>;
+type RegisterFormData = z.infer<typeof emailSchema>;
 
-export default function OnBoardingRegister() {
+export default function GetStarted() {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<RegisterFormData>({
     resolver: zodResolver(emailSchema),
   });
 
   const [showEmailModule, setShowEmailModule] = useState(false);
+  const [loading, setLoading] = useState(false);
   const emailRef = useRef<TextInput>(null);
 
-  const submitEmail = async (data: FormData) => {
-    console.log(data);
-  };
+  async function signUpWithEmail(data: RegisterFormData) {
+    setLoading(true);
+    const { email } = data;
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: "",
+      },
+    });
+    if (error) Alert.alert(error.message);
+    if (!session)
+      Alert.alert("Please check your inbox for email verification!");
+    setLoading(false);
+  }
 
   useEffect(() => {
     if (showEmailModule) {
@@ -40,10 +56,6 @@ export default function OnBoardingRegister() {
       }, 100);
     }
   }, [showEmailModule]);
-
-  const signUpWithEmail = () => {
-    setShowEmailModule(true);
-  };
 
   return (
     <View>
@@ -59,8 +71,15 @@ export default function OnBoardingRegister() {
               fontWeight: "bold",
             }}
           >
-            Register with{" "}
-            <Text style={{ color: Colors.primary[500] }}>GraViDaCare</Text>
+            Get Started with{" "}
+            <Text
+              style={{
+                color: Colors.primary[500],
+                textDecorationLine: "underline",
+              }}
+            >
+              GraVidaCare
+            </Text>
           </Text>
           <Text
             style={{
@@ -99,8 +118,10 @@ export default function OnBoardingRegister() {
                 backgroundColor={Colors.primary[500]}
                 width={"100%"}
                 textColor="white"
-                onPress={signUpWithEmail}
-                title="Sign up with Email"
+                onPress={() => {
+                  setShowEmailModule(true);
+                }}
+                title="Sign in with Email"
               />
             </>
           ) : (
@@ -136,8 +157,8 @@ export default function OnBoardingRegister() {
                 backgroundColor={Colors.primary[500]}
                 width={"100%"}
                 textColor="white"
-                onPress={handleSubmit(submitEmail)}
-                title="Sign up"
+                onPress={handleSubmit(signUpWithEmail)}
+                title="Sign in"
               />
               <View style={{ width: "100%", marginTop: 32 }}>
                 <ButtonComponent
