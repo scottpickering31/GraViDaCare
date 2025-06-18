@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.scottyp2004.GraVidaCare"
     },
     "web": {
       "bundler": "metro",
@@ -50,6 +51,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f8e06d4a-ee9d-460e-aaad-e847e9e6f1c6"
+      }
+    },
+    "owner": "scottyp2004"
   }
 }

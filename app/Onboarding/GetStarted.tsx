@@ -34,15 +34,17 @@ export default function GetStarted() {
   async function signUpWithEmail(data: RegisterFormData) {
     setLoading(true);
     const { email } = data;
+
     const {
       data: { session },
       error,
     } = await supabase.auth.signInWithOtp({
       email: email,
       options: {
-        emailRedirectTo: "",
+        emailRedirectTo: "exp+gravidacare://Auth/Callback",
       },
     });
+
     if (error) Alert.alert(error.message);
     if (!session)
       Alert.alert("Please check your inbox for email verification!");

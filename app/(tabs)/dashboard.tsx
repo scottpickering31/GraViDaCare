@@ -5,6 +5,7 @@ export default function Dashboard() {
   return (
     <View>
       <Text>Dashboard</Text>
+      <Text> Welcome</Text>
     </View>
   );
 }
