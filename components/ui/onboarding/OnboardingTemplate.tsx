@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
-import NavigationPill from "./NavigationPill";
+import NavigationPill from "./navigationPill";
 
 interface OnBoardingTemplateProps {
   text: string;

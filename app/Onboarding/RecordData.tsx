@@ -1,5 +1,5 @@
 import ButtonComponent from "@/components/buttons/buttonComponent";
-import OnBoardingTemplate from "@/components/ui/onboarding/OnboardingTemplate";
+import OnBoardingTemplate from "@/components/ui/onboarding/onBoardingTemplate";
 import { ONBOARDING_PAGES } from "@/constants/onBoardingPages";
 import { Colors } from "@/constants/styles/Colors";
 import { router } from "expo-router";
