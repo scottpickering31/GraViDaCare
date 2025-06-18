@@ -1,12 +1,12 @@
-import ButtonComponent from "@/components/Buttons/ButtonComponent";
-import OnBoardingTemplate from "@/components/ui/Onboarding/OnboardingTemplate";
-import { Colors } from "@/constants/styles/Colors";
+import ButtonComponent from "@/components/buttons/buttonComponent";
+import OnBoardingTemplate from "@/components/ui/onboarding/OnboardingTemplate";
 import { ONBOARDING_PAGES } from "@/constants/onBoardingPages";
+import { Colors } from "@/constants/styles/Colors";
 import { useOnboardingNavigation } from "@/hooks/useOnboardingNavigation";
 import React from "react";
 
 export default function Welcome() {
-  const { goNext, skip } = useOnboardingNavigation("Welcome");
+  const { goNext, skip } = useOnboardingNavigation("welcome");
 
   return (
     <OnBoardingTemplate
@@ -14,7 +14,7 @@ export default function Welcome() {
       heading="Welcome"
       imageSource={require("@/assets/illustration.png")}
       pages={ONBOARDING_PAGES}
-      currentPage="Welcome"
+      currentPage="welcome"
     >
       <ButtonComponent
         title="Skip"

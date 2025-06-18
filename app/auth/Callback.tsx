@@ -18,7 +18,7 @@ export default function AuthCallback() {
 
         if (session) {
           console.log("Type is " + type + " and session is " + session);
-          router.replace("/(tabs)/Dashboard");
+          router.replace("/(tabs)/dashboard");
         }
       } catch (err) {
         setError((err as Error).message);

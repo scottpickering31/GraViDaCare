@@ -4,13 +4,10 @@ import React from "react";
 export default function OnboardingLayout() {
   return (
     <Stack>
-      <Stack.Screen name="Welcome" options={{ headerShown: false }} />
-      <Stack.Screen name="EpilepsyData" options={{ headerShown: false }} />
-      <Stack.Screen name="RecordData" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="GetStarted"
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="welcome" options={{ headerShown: false }} />
+      <Stack.Screen name="epilepsyData" options={{ headerShown: false }} />
+      <Stack.Screen name="recordData" options={{ headerShown: false }} />
+      <Stack.Screen name="getStarted" options={{ headerShown: false }} />
     </Stack>
   );
 }

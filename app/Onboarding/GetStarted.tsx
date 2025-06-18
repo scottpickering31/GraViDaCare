@@ -1,7 +1,7 @@
 import FacebookLogo from "@/assets/icons/FacebookLogo.svg";
 import GoogleLogo from "@/assets/icons/GoogleLogo.svg";
 import NavArrow from "@/assets/icons/NavArrow.svg";
-import ButtonComponent from "@/components/Buttons/ButtonComponent";
+import ButtonComponent from "@/components/buttons/buttonComponent";
 import { Colors } from "@/constants/styles/Colors";
 import { supabase } from "@/lib/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,7 +41,7 @@ export default function GetStarted() {
     } = await supabase.auth.signInWithOtp({
       email: email,
       options: {
-        emailRedirectTo: "exp+gravidacare://Auth/Callback",
+        emailRedirectTo: "gravidacare://Auth/Callback",
       },
     });
 

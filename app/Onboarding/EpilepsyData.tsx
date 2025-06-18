@@ -1,5 +1,5 @@
-import ButtonComponent from "@/components/Buttons/ButtonComponent";
-import OnBoardingTemplate from "@/components/ui/Onboarding/OnboardingTemplate";
+import ButtonComponent from "@/components/buttons/buttonComponent";
+import OnBoardingTemplate from "@/components/ui/onboarding/OnboardingTemplate";
 import { ONBOARDING_PAGES } from "@/constants/onBoardingPages";
 import { Colors } from "@/constants/styles/Colors";
 import { useOnboardingNavigation } from "@/hooks/useOnboardingNavigation";
@@ -7,14 +7,14 @@ import { useOnboardingNavigation } from "@/hooks/useOnboardingNavigation";
 import React from "react";
 
 export default function EpilepsyData() {
-  const { goNext, skip } = useOnboardingNavigation("EpilepsyData");
+  const { goNext, skip } = useOnboardingNavigation("epilepsyData");
   return (
     <OnBoardingTemplate
       text="Epilepsy Data is here for you"
       heading="Epilepsy Data"
       imageSource={require("@/assets/illustration(1).png")}
       pages={ONBOARDING_PAGES}
-      currentPage="EpilepsyData"
+      currentPage="epilepsyData"
     >
       <ButtonComponent
         title="Skip"
