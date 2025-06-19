@@ -1,5 +1,5 @@
 import ButtonComponent from "@/components/buttons/buttonComponent";
-import OnBoardingTemplate from "@/components/ui/onboarding/onBoardingTemplate";
+import OnBoardingTemplate from "@/components/ui/onboarding/onboardingTemplate";
 import { ONBOARDING_PAGES } from "@/constants/onBoardingPages";
 import { Colors } from "@/constants/styles/Colors";
 import { useOnboardingNavigation } from "@/hooks/useOnboardingNavigation";
