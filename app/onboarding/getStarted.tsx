@@ -41,7 +41,7 @@ export default function GetStarted() {
     } = await supabase.auth.signInWithOtp({
       email: email,
       options: {
-        emailRedirectTo: "gravidacare://Auth/Callback",
+        emailRedirectTo: "gravidacare://auth/callback?source=signup",
       },
     });
 
@@ -176,13 +176,6 @@ export default function GetStarted() {
               </View>
             </View>
           )}
-
-          <Text>
-            Already have an account?{" "}
-            <Link href="/Auth/Login" style={{ color: Colors.primary[500] }}>
-              Sign In
-            </Link>
-          </Text>
         </View>
         <View style={{ alignItems: "center", gap: 5 }}>
           <Text style={styles.policyText}>
@@ -190,14 +183,14 @@ export default function GetStarted() {
           </Text>
           <Text style={styles.policyText}>
             <Link
-              href="/Legal/TermsAndConditionsScreen"
+              href="/legal/termsAndConditions"
               style={{ color: Colors.primary[500] }}
             >
               Terms of Service
             </Link>{" "}
             and{" "}
             <Link
-              href="/Legal/PrivacyPolicyScreen"
+              href="/legal/privacyPolicyScreen"
               style={{ color: Colors.primary[500] }}
             >
               Privacy Policy

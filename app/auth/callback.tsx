@@ -1,43 +1,59 @@
-import { createSessionFromUrl } from "@/components/auth/createSessionFromUrl";
+import { createSessionFromUrl } from "@/constants/createSessionFromUrl";
+import { useURLStore } from "@/store/urlStore";
 import * as Linking from "expo-linking";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 
 export default function AuthCallback() {
-  const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const [processing, setProcessing] = useState(true);
+  const hotUrl = useURLStore((state) => state.url);
+  const [urlToUse, setUrlToUse] = useState<string | null>(null);
 
+  // Step 1: Try to get the cold start URL first
   useEffect(() => {
-    const handleAuthRedirect = async () => {
-      const url = await Linking.getInitialURL();
-      if (!url) return;
+    Linking.getInitialURL().then((coldUrl) => {
+      if (coldUrl) {
+        console.log("❄️ Cold URL used:", coldUrl);
+        setUrlToUse(coldUrl);
+      } else if (hotUrl) {
+        console.log("🔥 Hot URL used:", hotUrl);
+        setUrlToUse(hotUrl);
+      }
+    });
+  }, [hotUrl]);
 
+  // Step 2: When we have a URL, process it
+  useEffect(() => {
+    if (!urlToUse) return;
+
+    const run = async () => {
       try {
-        const { session, type } = await createSessionFromUrl(url);
+        console.log("🔗 Using URL for session:", urlToUse);
 
-        if (session) {
-          console.log("Type is " + type + " and session is " + session);
+        await createSessionFromUrl(urlToUse);
+
+        const params = new URL(urlToUse).searchParams;
+        const source = params.get("source");
+        console.log("✨ Auth source:", source);
+
+        if (source === "signup") {
           router.replace("/(tabs)/dashboard");
+        } else {
+          router.replace("/onboarding");
         }
       } catch (err) {
-        setError((err as Error).message);
+        console.error("❌ Error creating session:", err);
+      } finally {
+        setProcessing(false);
       }
     };
 
-    handleAuthRedirect();
-  }, []);
-
-  if (error) {
-    return (
-      <View>
-        <Text>Error: {error}</Text>
-      </View>
-    );
-  }
+    run();
+  }, [urlToUse]);
 
   return (
-    <View>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <ActivityIndicator />
       <Text>Logging you in...</Text>
     </View>
