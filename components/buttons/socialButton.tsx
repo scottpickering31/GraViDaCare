@@ -1,5 +1,6 @@
+import { useButtonAnimation } from "@/hooks/useButtonAnimation";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Animated, Pressable, StyleSheet, Text } from "react-native";
 
 interface SocialButtonProps {
   title: string;
@@ -20,9 +21,11 @@ export default function SocialButton({
   borderWidth,
   width,
 }: SocialButtonProps) {
+  const { animatedStyle, handlePressIn, handlePressOut } = useButtonAnimation();
   return (
-    <View
+    <Animated.View
       style={[
+        animatedStyle,
         styles.container,
         {
           backgroundColor: backgroundColor,
@@ -32,10 +35,10 @@ export default function SocialButton({
         },
       ]}
     >
-      <Pressable>
+      <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>
         <Text>SocialButton</Text>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }
 

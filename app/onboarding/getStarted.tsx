@@ -2,10 +2,12 @@ import FacebookLogo from "@/assets/icons/FacebookLogo.svg";
 import GoogleLogo from "@/assets/icons/GoogleLogo.svg";
 import NavArrow from "@/assets/icons/NavArrow.svg";
 import ButtonComponent from "@/components/buttons/buttonComponent";
+import { createSessionFromUrl } from "@/constants/createSessionFromUrl";
 import { Colors } from "@/constants/styles/Colors";
 import { supabase } from "@/lib/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
 import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
@@ -17,6 +19,7 @@ const emailSchema = z.object({
 });
 
 type RegisterFormData = z.infer<typeof emailSchema>;
+type SocialProvider = "google" | "facebook";
 
 export default function GetStarted() {
   const {
@@ -30,6 +33,26 @@ export default function GetStarted() {
   const [showEmailModule, setShowEmailModule] = useState(false);
   const [loading, setLoading] = useState(false);
   const emailRef = useRef<TextInput>(null);
+
+  const performOAuth = async (provider: SocialProvider) => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: provider,
+      options: {
+        redirectTo: "gravidacare://auth/callback?source=signup",
+        skipBrowserRedirect: true,
+      },
+    });
+    if (error) throw error;
+    const res = await WebBrowser.openAuthSessionAsync(
+      data?.url ?? "",
+      "gravidacare://auth/callback?source=signup"
+    );
+    if (res.type === "success") {
+      const { url } = res;
+      await createSessionFromUrl(url);
+      console.log("🚀 ~ file: GetStarted.tsx:97 ~ performOAuth ~ url:", url);
+    }
+  };
 
   async function signUpWithEmail(data: RegisterFormData) {
     setLoading(true);
@@ -100,7 +123,9 @@ export default function GetStarted() {
                 width={"100%"}
                 textColor={Colors.typography[900]}
                 backgroundColor="white"
-                onPress={() => {}}
+                onPress={() => {
+                  performOAuth("google");
+                }}
                 borderColor={Colors.gray[300]}
                 borderWidth={1}
                 icon={GoogleLogo}
@@ -110,7 +135,9 @@ export default function GetStarted() {
                 width={"100%"}
                 textColor="white"
                 backgroundColor={"#0C63D4"}
-                onPress={() => {}}
+                onPress={() => {
+                  performOAuth("facebook");
+                }}
                 borderColor={Colors.gray[600]}
                 borderWidth={1}
                 icon={FacebookLogo}

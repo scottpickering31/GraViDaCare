@@ -1,4 +1,5 @@
 import { createSessionFromUrl } from "@/constants/createSessionFromUrl";
+import { useAuthStore } from "@/store/authStore";
 import { useURLStore } from "@/store/urlStore";
 import * as Linking from "expo-linking";
 import { router } from "expo-router";
@@ -6,56 +7,38 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 
 export default function AuthCallback() {
-  const [processing, setProcessing] = useState(true);
-  const hotUrl = useURLStore((state) => state.url);
+  const hotUrl = useURLStore((s) => s.url);
+  const { setSession } = useAuthStore();
   const [urlToUse, setUrlToUse] = useState<string | null>(null);
 
-  // Step 1: Try to get the cold start URL first
+  /** 1️⃣  Pick cold-start URL first, otherwise hot-start */
   useEffect(() => {
     Linking.getInitialURL().then((coldUrl) => {
-      if (coldUrl) {
-        console.log("❄️ Cold URL used:", coldUrl);
-        setUrlToUse(coldUrl);
-      } else if (hotUrl) {
-        console.log("🔥 Hot URL used:", hotUrl);
-        setUrlToUse(hotUrl);
-      }
+      if (coldUrl) setUrlToUse(coldUrl);
+      else if (hotUrl) setUrlToUse(hotUrl);
     });
   }, [hotUrl]);
 
-  // Step 2: When we have a URL, process it
+  /** 2️⃣  Once we have a URL, create the Supabase session */
   useEffect(() => {
     if (!urlToUse) return;
 
-    const run = async () => {
+    (async () => {
       try {
-        console.log("🔗 Using URL for session:", urlToUse);
-
-        await createSessionFromUrl(urlToUse);
-
-        const params = new URL(urlToUse).searchParams;
-        const source = params.get("source");
-        console.log("✨ Auth source:", source);
-
-        if (source === "signup") {
-          router.replace("/(tabs)/dashboard");
-        } else {
-          router.replace("/onboarding");
-        }
+        const { session } = await createSessionFromUrl(urlToUse);
+        setSession(session); // 🟢 store in Zustand
+        router.replace("/(tabs)/dashboard"); // 🚀 leave callback
       } catch (err) {
-        console.error("❌ Error creating session:", err);
-      } finally {
-        setProcessing(false);
+        console.error("Auth error:", err);
+        router.replace("/onboarding"); // fallback
       }
-    };
-
-    run();
+    })();
   }, [urlToUse]);
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <ActivityIndicator />
-      <Text>Logging you in...</Text>
+      <Text>Logging you in…</Text>
     </View>
   );
 }

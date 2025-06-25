@@ -1,5 +1,6 @@
+import { useButtonAnimation } from "@/hooks/useButtonAnimation";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 interface ButtonComponentProps {
@@ -23,9 +24,12 @@ export default function ButtonComponent({
   width,
   icon: Icon,
 }: ButtonComponentProps) {
+  const { animatedStyle, handlePressIn, handlePressOut } = useButtonAnimation();
+
   return (
-    <View
+    <Animated.View
       style={[
+        animatedStyle,
         styles.container,
         {
           backgroundColor,
@@ -35,7 +39,12 @@ export default function ButtonComponent({
         },
       ]}
     >
-      <Pressable onPress={onPress} style={styles.pressable}>
+      <Pressable
+        onPress={onPress}
+        style={styles.pressable}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+      >
         <View style={styles.content}>
           {Icon && <Icon width={20} height={20} />}
           <Text
@@ -48,7 +57,7 @@ export default function ButtonComponent({
           </Text>
         </View>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }
 

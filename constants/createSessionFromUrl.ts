@@ -22,8 +22,6 @@ export const createSessionFromUrl = async (url: string) => {
     refresh_token,
   });
 
-  console.log(data.session);
-
   if (error) throw new Error(error.message);
 
   return {
