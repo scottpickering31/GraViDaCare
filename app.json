@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.scottyp2004.GraVidaCare"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +33,6 @@
         }
       ],
       "expo-router",
-
       [
         "expo-splash-screen",
         {
