@@ -1,6 +1,10 @@
 import FacebookLogo from "@/assets/icons/FacebookLogo.svg";
 import GoogleLogo from "@/assets/icons/GoogleLogo.svg";
 import NavArrow from "@/assets/icons/NavArrow.svg";
+import {
+  configureGoogle,
+  useGoogleSignIn,
+} from "@/components/auth/googleSignIn";
 import ButtonComponent from "@/components/buttons/buttonComponent";
 import { createSessionFromUrl } from "@/constants/createSessionFromUrl";
 import { Colors } from "@/constants/styles/Colors";
@@ -29,10 +33,13 @@ export default function GetStarted() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(emailSchema),
   });
-
   const [showEmailModule, setShowEmailModule] = useState(false);
   const [loading, setLoading] = useState(false);
   const emailRef = useRef<TextInput>(null);
+
+  // configure in google sign in logic
+  useEffect(configureGoogle, []);
+  const handleGooglePress = useGoogleSignIn();
 
   const performOAuth = async (provider: SocialProvider) => {
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -124,7 +131,9 @@ export default function GetStarted() {
                 textColor={Colors.typography[900]}
                 backgroundColor="white"
                 onPress={() => {
-                  performOAuth("google");
+                  {
+                    handleGooglePress;
+                  }
                 }}
                 borderColor={Colors.gray[300]}
                 borderWidth={1}
