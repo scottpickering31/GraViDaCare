@@ -1,39 +1,35 @@
-import { createSessionFromUrl } from "@/constants/createSessionFromUrl";
-import { useAuthStore } from "@/store/authStore";
+/* app/auth/callback.tsx */
+import React from "react";
+import { ActivityIndicator, View, Text } from "react-native";
 import { useURLStore } from "@/store/urlStore";
-import * as Linking from "expo-linking";
+import { useFirstAuthUrl } from "@/hooks/useFirstAuthUrl";
+import { createSessionFromUrl } from "@/constants/createSessionFromUrl";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { useHandleSupabaseSession } from "@/hooks/useHandleSupabaseSession";
 
 export default function AuthCallback() {
   const hotUrl = useURLStore((s) => s.url);
-  const { setSession } = useAuthStore();
-  const [urlToUse, setUrlToUse] = useState<string | null>(null);
+  const chosenUrl = useFirstAuthUrl(hotUrl);
+  const handleSession = useHandleSupabaseSession();
 
-  /** 1️⃣  Pick cold-start URL first, otherwise hot-start */
-  useEffect(() => {
-    Linking.getInitialURL().then((coldUrl) => {
-      if (coldUrl) setUrlToUse(coldUrl);
-      else if (hotUrl) setUrlToUse(hotUrl);
-    });
-  }, [hotUrl]);
+  React.useEffect(() => {
+    if (!chosenUrl) return;
 
-  /** 2️⃣  Once we have a URL, create the Supabase session */
-  useEffect(() => {
-    if (!urlToUse) return;
+    let active = true;
 
     (async () => {
       try {
-        const { session } = await createSessionFromUrl(urlToUse);
-        setSession(session); // 🟢 store in Zustand
-        router.replace("/(tabs)/dashboard"); // 🚀 leave callback
-      } catch (err) {
-        console.error("Auth error:", err);
-        router.replace("/onboarding"); // fallback
+        const { session } = await createSessionFromUrl(chosenUrl);
+        if (active && session) handleSession(session);
+      } catch (e) {
+        if (active) router.replace("/onboarding");
       }
     })();
-  }, [urlToUse]);
+
+    return () => {
+      active = false;
+    };
+  }, [chosenUrl]);
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

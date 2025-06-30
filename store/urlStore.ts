@@ -1,9 +1,13 @@
 import { create } from "zustand";
 
-export const useURLStore = create<{
+interface UrlState {
   url: string | null;
-  setUrl: (url: string | null) => void;
-}>((set) => ({
+  setUrl: (u: string | null) => void;
+  clearUrl: () => void;
+}
+
+export const useURLStore = create<UrlState>((set) => ({
   url: null,
   setUrl: (url) => set({ url }),
+  clearUrl: () => set({ url: null }),
 }));

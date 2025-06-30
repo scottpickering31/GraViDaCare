@@ -1,11 +1,8 @@
 import { supabase } from "@/lib/supabase";
-import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
-import * as WebBrowser from "expo-web-browser";
 
-WebBrowser.maybeCompleteAuthSession();
-const redirectUri = makeRedirectUri();
-console.log("Redirect URI:", redirectUri);
+// WebBrowser.maybeCompleteAuthSession();
+// const redirectUri = makeRedirectUri();
 
 export const createSessionFromUrl = async (url: string) => {
   const { params, errorCode } = QueryParams.getQueryParams(url);

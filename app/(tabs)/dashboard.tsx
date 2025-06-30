@@ -1,18 +1,45 @@
+import CompleteProfileModal from "@/components/modals/completeProfileModal";
+import { useProfile } from "@/hooks/api/useProfile";
 import { useAuthStore } from "@/store/authStore";
-import React from "react";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
+import Logout from "../auth/logout";
 
-export default function Dashboard() {
+export default function DashboardGate() {
   const { session } = useAuthStore();
 
-  console.log(
-    JSON.stringify(session, null, 2) +
-      " This is in the Dashboard file, lets see if this works!"
-  );
+  const { data: profile, isLoading, isError } = useProfile();
+
+  console.log("profile ", JSON.stringify(profile, null, 2));
+
+  /** 2️⃣  Still loading? */
+  if (!session || isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  /** 3️⃣  Check completeness */
+  // const needsMoreInfo =
+  //   !profile.first_name || !profile.last_name || !profile.date_of_birth;
+
+  /** 4️⃣  Render either the modal or the dashboard */
   return (
-    <View>
-      <Text>Dashboard</Text>
-      <Text> Welcome</Text>
+    <View style={{ flex: 1 }}>
+      {/* {needsMoreInfo && ( */}
+      <CompleteProfileModal
+      // initialValues={profile}
+      // onDone={/* refetch profile or invalidate query */}
+      />
+      {/* )} */}
+
+      {/* Your actual dashboard */}
+      <View style={{ flex: 1 }}>
+        <Text>Dashboard</Text>
+        <Text>Welcome sailor</Text>
+        <Logout />
+      </View>
     </View>
   );
 }
