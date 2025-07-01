@@ -1,12 +1,15 @@
+// store/authStore.ts
 import { Session } from "@supabase/supabase-js";
 import { create } from "zustand";
 
-interface AuthState {
+export const useAuthStore = create<{
   session: Session | null;
+  hydrated: boolean;
   setSession: (s: Session | null) => void;
-}
-
-export const useAuthStore = create<AuthState>((set) => ({
+  setHydrated: () => void;
+}>((set) => ({
   session: null,
-  setSession: (s) => set({ session: s }),
+  hydrated: false,
+  setSession: (session) => set({ session }),
+  setHydrated: () => set({ hydrated: true }),
 }));

@@ -1,7 +1,12 @@
-import { Stack } from "expo-router";
-import React from "react";
+import { useAuthStore } from "@/store/authStore";
+import { Redirect, Stack } from "expo-router";
 
 export default function OnboardingLayout() {
+  const { session, hydrated } = useAuthStore();
+
+  if (!hydrated) return null;
+  if (session) return <Redirect href="/(tabs)/dashboard" />;
+
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />

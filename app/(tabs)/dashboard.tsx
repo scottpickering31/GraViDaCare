@@ -1,45 +1,73 @@
-import CompleteProfileModal from "@/components/modals/completeProfileModal";
-import { useProfile } from "@/hooks/api/useProfile";
+/* app/(tabs)/dashboard.tsx */
+import CreatePatientProfileModal from "@/components/modals/createPatientProfileModal";
 import { useAuthStore } from "@/store/authStore";
-import { ActivityIndicator, Text, View } from "react-native";
+import { Redirect } from "expo-router";
+import React, { useState } from "react";
+import { RefreshControl, ScrollView, Text, View } from "react-native";
 import Logout from "../auth/logout";
 
 export default function DashboardGate() {
-  const { session } = useAuthStore();
+  const { session, setSession } = useAuthStore();
 
-  const { data: profile, isLoading, isError } = useProfile();
+  if (!session) return <Redirect href="/onboarding" />;
 
-  console.log("profile ", JSON.stringify(profile, null, 2));
+  const meta = session.user.user_metadata ?? {};
+  const needsMoreInfo =
+    !meta.first_name || !meta.last_name || !meta.date_of_birth;
 
-  /** 2️⃣  Still loading? */
-  if (!session || isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator />
-      </View>
-    );
-  }
+  /* manual refresh placeholder */
+  const [refreshing, setRefreshing] = useState(false);
 
-  /** 3️⃣  Check completeness */
-  // const needsMoreInfo =
-  //   !profile.first_name || !profile.last_name || !profile.date_of_birth;
+  /* When modal saves, update session.user.user_metadata in Zustand */
+  const handleDone = (values: any) => {
+    setSession({
+      ...session,
+      user: {
+        ...session.user,
+        user_metadata: { ...session.user.user_metadata, ...values },
+      },  
+    });
+  };
 
-  /** 4️⃣  Render either the modal or the dashboard */
   return (
     <View style={{ flex: 1 }}>
-      {/* {needsMoreInfo && ( */}
-      <CompleteProfileModal
-      // initialValues={profile}
-      // onDone={/* refetch profile or invalidate query */}
+      <CreatePatientProfileModal
+        visible={needsMoreInfo}
+        initialValues={meta}
+        onDone={handleDone}
       />
-      {/* )} */}
 
-      {/* Your actual dashboard */}
-      <View style={{ flex: 1 }}>
-        <Text>Dashboard</Text>
-        <Text>Welcome sailor</Text>
-        <Logout />
-      </View>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => setRefreshing(false)}
+          />
+        }
+      >
+        <View style={styles.center}>
+          <Text style={styles.heading}>Dashboard</Text>
+          <Text style={styles.welcome}>
+            Welcome{" "}
+            {meta.first_name
+              ? `${meta.first_name} ${meta.last_name}`
+              : session.user.email}
+          </Text>
+          <Logout />
+        </View>
+      </ScrollView>
     </View>
   );
 }
+
+const styles = {
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  heading: { fontSize: 24, fontWeight: "600", marginBottom: 8 },
+  welcome: { fontSize: 16, marginBottom: 24, textAlign: "center" },
+} as const;

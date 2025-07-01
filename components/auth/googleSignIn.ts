@@ -22,8 +22,6 @@ export const useGoogleSignIn = () => {
       if (Platform.OS === "android") await GoogleSignin.hasPlayServices();
       const res = await GoogleSignin.signIn();
 
-      console.log("This is res " + JSON.stringify(res, null, 2));
-
       if (!res.data?.idToken) {
         throw new Error("Google Sign-In missing idToken");
       }
