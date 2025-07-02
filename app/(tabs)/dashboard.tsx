@@ -1,59 +1,62 @@
-/* app/(tabs)/dashboard.tsx */
-import CreatePatientProfileModal from "@/components/modals/createPatientProfileModal";
+import { usePatients } from "@/hooks/api/usePatients";
 import { useAuthStore } from "@/store/authStore";
 import { Redirect } from "expo-router";
 import React, { useState } from "react";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
+import NewPatientModal from "../(modals)/newPatientModal";
 import Logout from "../auth/logout";
 
 export default function DashboardGate() {
-  const { session, setSession } = useAuthStore();
+  const { session } = useAuthStore();
+  const {
+    data: patients,
+    isLoading,
+    refetch,
+    isRefetching,
+    error,
+  } = usePatients();
 
   if (!session) return <Redirect href="/onboarding" />;
 
   const meta = session.user.user_metadata ?? {};
-  const needsMoreInfo =
-    !meta.first_name || !meta.last_name || !meta.date_of_birth;
 
-  /* manual refresh placeholder */
   const [refreshing, setRefreshing] = useState(false);
 
-  /* When modal saves, update session.user.user_metadata in Zustand */
-  const handleDone = (values: any) => {
-    setSession({
-      ...session,
-      user: {
-        ...session.user,
-        user_metadata: { ...session.user.user_metadata, ...values },
-      },  
-    });
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <CreatePatientProfileModal
-        visible={needsMoreInfo}
-        initialValues={meta}
-        onDone={handleDone}
-      />
-
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => setRefreshing(false)}
+            refreshing={refreshing || isRefetching}
+            onRefresh={handleRefresh}
           />
         }
       >
         <View style={styles.center}>
           <Text style={styles.heading}>Dashboard</Text>
-          <Text style={styles.welcome}>
-            Welcome{" "}
-            {meta.first_name
-              ? `${meta.first_name} ${meta.last_name}`
-              : session.user.email}
-          </Text>
+
+          {isLoading ? (
+            <Text>Loading patients…</Text>
+          ) : error ? (
+            <Text>Error loading patients</Text>
+          ) : patients.length === 0 ? (
+            <NewPatientModal />
+          ) : (
+            <Text style={styles.welcome}>
+              Welcome{" "}
+              {meta.first_name
+                ? `${meta.first_name} ${meta.last_name}`
+                : session.user.email}
+            </Text>
+          )}
+
           <Logout />
         </View>
       </ScrollView>

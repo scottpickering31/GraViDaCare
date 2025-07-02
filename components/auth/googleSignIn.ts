@@ -7,7 +7,6 @@ import {
 } from "@react-native-google-signin/google-signin";
 import { Platform } from "react-native";
 
-/** Call once (e.g. in GetStarted) */
 export const configureGoogle = () =>
   GoogleSignin.configure({
     scopes: ["https://www.googleapis.com/auth/drive.readonly"],
@@ -32,6 +31,9 @@ export const useGoogleSignIn = () => {
       });
       if (error) throw error;
       if (data.session) handleSession(data.session);
+      console.log(
+        "This is the session " + JSON.stringify(data.session, null, 2)
+      );
     } catch (err) {
       if (isErrorWithCode(err)) {
         if (err.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
