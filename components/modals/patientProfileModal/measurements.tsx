@@ -1,10 +1,6 @@
 import { ControlledText } from "@/components/modals/patientProfileModal/controlledText";
-import { patientInfoModalFormValues } from "@/types/patientInfoModalFormValues";
-import { useFormContext } from "react-hook-form";
 
 export default function Measurements() {
-  const { control } = useFormContext<patientInfoModalFormValues>();
-
   return (
     <>
       <ControlledText name="head_circumference_cm" label="Head Circumference" />

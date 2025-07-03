@@ -29,16 +29,19 @@ export function ControlledText({
       <Controller
         control={control}
         name={name}
-        render={({ field: { value, onChange } }) => (
-          <TextInput
-            value={String(value ?? "")}
-            onChangeText={onChange}
-            multiline={multiline}
-            style={{ borderWidth: 1 }}
-            placeholderTextColor={"gray"}
-            placeholder={label}
-          />
-        )}
+        render={({ field: { value, onChange } }) => {
+          console.log(`${name} value:`, value);
+          return (
+            <TextInput
+              value={String(value ?? "")}
+              onChangeText={onChange}
+              multiline={multiline}
+              style={{ borderWidth: 1 }}
+              placeholderTextColor={"gray"}
+              placeholder={label}
+            />
+          );
+        }}
       />
     </>
   );

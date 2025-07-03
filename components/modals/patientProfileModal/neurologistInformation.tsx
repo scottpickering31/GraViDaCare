@@ -1,5 +1,3 @@
-import { patientInfoModalFormValues } from "@/types/patientInfoModalFormValues";
-import { useFormContext } from "react-hook-form";
 import { ControlledText } from "@/components/modals/patientProfileModal/controlledText";
 
 export default function NeurologistInformation() {

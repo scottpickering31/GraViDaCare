@@ -14,19 +14,19 @@ type FormValues = z.infer<typeof fullWizardSchema>;
 export default function NewPatientModal() {
   const methods = useForm<FormValues>({
     resolver: zodResolver(fullWizardSchema),
-    ...defaultIntroModalValues,
+    defaultValues: defaultIntroModalValues,
   });
 
   const [step, setStep] = useState(0);
-  const [visible, setVisible] = useState(true);
 
   const isLast = step === steps.length - 1;
   const Current = steps[step].Component;
 
   const handleNext = () => {
     if (isLast) {
-      // TODO: submit to Supabase
-      setVisible(false);
+      methods.handleSubmit((data) => {
+        console.log("Form Data", data);
+      })();
     } else {
       setStep((s) => s + 1);
     }

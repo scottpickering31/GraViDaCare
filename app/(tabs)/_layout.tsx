@@ -14,12 +14,12 @@ export default function TabsLayout() {
         options={{ title: "Dashboard", headerShown: false }}
       />
       <Tabs.Screen
-        name="profile"
-        options={{ title: "Profile", headerShown: false }}
-      />
-      <Tabs.Screen
         name="reports"
         options={{ title: "Reports", headerShown: false }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{ title: "Profile", headerShown: false }}
       />
     </Tabs>
   );

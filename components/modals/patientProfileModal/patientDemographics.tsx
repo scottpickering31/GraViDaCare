@@ -1,9 +1,7 @@
 import { ControlledText } from "@/components/modals/patientProfileModal/controlledText";
-import { patientInfoModalFormValues } from "@/types/patientInfoModalFormValues";
-import { useFormContext } from "react-hook-form";
 
 export default function PatientDemographics() {
-  const { control } = useFormContext<patientInfoModalFormValues>();
+
 
   return (
     <>
