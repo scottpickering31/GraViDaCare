@@ -1,9 +1,10 @@
+import ButtonComponent from "@/components/buttons/buttonComponent";
+import { Colors } from "@/constants/styles/Colors";
 import { usePatients } from "@/hooks/api/usePatients";
 import { useAuthStore } from "@/store/authStore";
-import { Redirect } from "expo-router";
+import { Redirect, router } from "expo-router";
 import React, { useState } from "react";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
-import NewPatientModal from "../(modals)/newPatientModal";
 import Logout from "../auth/logout";
 
 export default function DashboardGate() {
@@ -47,7 +48,13 @@ export default function DashboardGate() {
           ) : error ? (
             <Text>Error loading patients</Text>
           ) : patients.length === 0 ? (
-            <NewPatientModal />
+            <ButtonComponent
+              backgroundColor={Colors.primary[500]}
+              textColor="white"
+              title="Add a patient"
+              width="100%"
+              onPress={() => router.push("/(modals)/newPatientModal")}
+            />
           ) : (
             <Text style={styles.welcome}>
               Welcome{" "}
@@ -70,6 +77,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
+    gap: 20,
   },
   heading: { fontSize: 24, fontWeight: "600", marginBottom: 8 },
   welcome: { fontSize: 16, marginBottom: 24, textAlign: "center" },

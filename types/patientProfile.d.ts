@@ -5,9 +5,10 @@ export default interface SetPatientProfileData {
   dob: string;
   gender: "Male" | "Female" | "Other";
 
-  // Seizure Typings
+  // Seizure Types
   primaryDiagnosis: string;
   seizure_types: string[];
+  first_seizure_at?: string;
 
   // Neurologist Information
   neurologist_name?: string;
@@ -23,5 +24,4 @@ export default interface SetPatientProfileData {
   head_circumference_cm?: number;
   weight_kg?: number;
   height_cm?: number;
-  first_seizure_at?: string;
 }

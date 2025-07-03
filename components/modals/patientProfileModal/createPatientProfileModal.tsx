@@ -1,3 +1,4 @@
+import LogoutButton from "@/app/auth/logout";
 import { useAuthStore } from "@/store/authStore";
 import React from "react";
 import {
@@ -14,14 +15,16 @@ interface Props {
   headingText: string;
   patientModalStyles?: StyleProp<ViewStyle>;
   children: React.ReactNode;
-  onPress: () => void;
+  onNextPress: () => void;
+  onBackPress: () => void;
 }
 
 export default function createPatientProfileModal({
   headingText,
   children,
   patientModalStyles,
-  onPress,
+  onNextPress,
+  onBackPress,
 }: Props) {
   const { session } = useAuthStore();
 
@@ -38,10 +41,17 @@ export default function createPatientProfileModal({
           {children}
           <Pressable
             style={[styles.button, patientModalStyles]}
-            onPress={onPress}
+            onPress={onNextPress}
           >
             <Text style={styles.buttonText}>Next</Text>
           </Pressable>
+          <Pressable
+            style={[styles.button, patientModalStyles]}
+            onPress={onBackPress}
+          >
+            <Text style={styles.buttonText}>Back</Text>
+          </Pressable>
+          <LogoutButton />
         </View>
       </View>
     </Modal>

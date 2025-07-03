@@ -1,10 +1,18 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { ControlledText } from "@/components/modals/patientProfileModal/controlledText";
+import { patientInfoModalFormValues } from "@/types/patientInfoModalFormValues";
+import { useFormContext } from "react-hook-form";
 
 export default function Measurements() {
+  const { control } = useFormContext<patientInfoModalFormValues>();
+
   return (
-    <View>
-      <Text>Measurements</Text>
-    </View>
-  )
+    <>
+      <ControlledText name="head_circumference_cm" label="Head Circumference" />
+      <ControlledText name="weight_kg" label="Weight" />
+      <ControlledText name="height_cm" label="Height" />
+    </>
+  );
 }
+// head_circumference_cm?: number;
+//   weight_kg?: number;
+//   height_cm?: number;

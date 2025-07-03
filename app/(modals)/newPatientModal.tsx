@@ -1,35 +1,22 @@
-import CreatePatientProfileModal from "@/components/modals/modalTemplate";
-import Allergies from "@/components/modals/patientProfileModal/allergies";
-import PatientMeasurements from "@/components/modals/patientProfileModal/measurements";
-import NeurologistInformation from "@/components/modals/patientProfileModal/neurologistInformation";
-import PatientDemographics from "@/components/modals/patientProfileModal/patientDemographics";
-import SeizureTypes from "@/components/modals/patientProfileModal/seizureTypes";
+import CreatePatientProfileModal from "@/components/modals/patientProfileModal/createPatientProfileModal";
+import {
+  defaultIntroModalValues,
+  fullWizardSchema,
+  steps,
+} from "@/constants/modals/introModal";
+import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
 
-const steps = [
-  {
-    heading: "Patient Demographics",
-    Component: PatientDemographics,
-  },
-  {
-    heading: "Height & weight",
-    Component: PatientMeasurements,
-  },
-  {
-    heading: "Allergies",
-    Component: Allergies,
-  },
-  {
-    heading: "Neurologist Information",
-    Component: NeurologistInformation,
-  },
-  {
-    heading: "Seizure Types",
-    Component: SeizureTypes,
-  },
-];
+type FormValues = z.infer<typeof fullWizardSchema>;
 
 export default function NewPatientModal() {
+  const methods = useForm<FormValues>({
+    resolver: zodResolver(fullWizardSchema),
+    ...defaultIntroModalValues,
+  });
+
   const [step, setStep] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -45,12 +32,20 @@ export default function NewPatientModal() {
     }
   };
 
+  const handleBack = () => {
+    if (step === 0) return;
+    setStep((s) => s - 1);
+  };
+
   return (
-    <CreatePatientProfileModal
-      headingText={steps[step].heading}
-      onPress={handleNext}
-    >
-      <Current />
-    </CreatePatientProfileModal>
+    <FormProvider {...methods}>
+      <CreatePatientProfileModal
+        headingText={steps[step].heading}
+        onNextPress={handleNext}
+        onBackPress={handleBack}
+      >
+        <Current />
+      </CreatePatientProfileModal>
+    </FormProvider>
   );
 }

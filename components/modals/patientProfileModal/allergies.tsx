@@ -1,10 +1,13 @@
-import React from "react";
-import { Text, View } from "react-native";
+import { ControlledText } from "@/components/modals/patientProfileModal/controlledText";
 
 export default function Allergies() {
   return (
-    <View>
-      <Text>Allergies</Text>
-    </View>
+    <>
+      <ControlledText name="allergies" label="Allergies" />
+      <ControlledText name="emergency_phone" label="Emergency Phone" />
+    </>
   );
 }
+
+// allergies
+// emergency_phone

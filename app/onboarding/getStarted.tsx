@@ -10,7 +10,7 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TextInput,  
+  TextInput,
   View,
 } from "react-native";
 import { z } from "zod";
@@ -51,7 +51,7 @@ export default function GetStarted() {
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [sending, setSending] = useState(false);
   const handleSession = useHandleSupabaseSession(); // <- central success path
-  const googlePress = useGoogleSignIn();
+  const performOAuthGoogle = useGoogleSignIn();
 
   /** ---------- boot ---------- */
   useEffect(configureGoogle, []);
@@ -143,7 +143,7 @@ export default function GetStarted() {
                 borderColor={Colors.gray[300]}
                 borderWidth={1}
                 width="100%"
-                onPress={googlePress}
+                onPress={performOAuthGoogle}
               />
               <ButtonComponent
                 icon={FacebookLogo}
