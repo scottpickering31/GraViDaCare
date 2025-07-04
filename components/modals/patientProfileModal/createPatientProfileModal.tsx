@@ -1,9 +1,9 @@
 import LogoutButton from "@/app/auth/logout";
-import { useAuthStore } from "@/store/authStore";
+import ButtonComponent from "@/components/buttons/buttonComponent";
+import { Colors } from "@/constants/styles/Colors";
 import React from "react";
 import {
   Modal,
-  Pressable,
   StyleProp,
   StyleSheet,
   Text,
@@ -17,40 +17,58 @@ interface Props {
   children: React.ReactNode;
   onNextPress: () => void;
   onBackPress: () => void;
+  canGoBack: boolean;
+  onSkipPress?: () => void;
+  isLast: boolean;
 }
 
-export default function createPatientProfileModal({
+// createPatientProfileModal.tsx
+export default function CreatePatientProfileModal({
   headingText,
   children,
-  patientModalStyles,
   onNextPress,
   onBackPress,
+  onSkipPress,
+  isLast,
+  canGoBack,
 }: Props) {
-  const { session } = useAuthStore();
-
-  const meta = session?.user.user_metadata ?? {};
-
-  const needsMoreInfo =
-    !meta.first_name || !meta.last_name || !meta.date_of_birth;
-
   return (
-    <Modal animationType="slide" transparent visible={needsMoreInfo}>
+    <Modal animationType="slide" transparent>
       <View style={styles.overlay}>
         <View style={styles.card}>
           <Text style={styles.heading}>{headingText}</Text>
           {children}
-          <Pressable
-            style={[styles.button, patientModalStyles]}
-            onPress={onNextPress}
-          >
-            <Text style={styles.buttonText}>Next</Text>
-          </Pressable>
-          <Pressable
-            style={[styles.button, patientModalStyles]}
-            onPress={onBackPress}
-          >
-            <Text style={styles.buttonText}>Back</Text>
-          </Pressable>
+
+          <View style={{ flexDirection: "column", gap: 8 }}>
+            {onSkipPress && (
+              <ButtonComponent
+                backgroundColor={Colors.gray[100]}
+                title="Skip"
+                width="50%"
+                textColor="black"
+                onPress={onSkipPress}
+              />
+            )}
+
+            {canGoBack && (
+              <ButtonComponent
+                backgroundColor={Colors.primary[500]}
+                title="Back"
+                textColor="white"
+                width="50%"
+                onPress={onBackPress}
+              />
+            )}
+
+            <ButtonComponent
+              backgroundColor={Colors.primary[500]}
+              title={isLast ? "Submit" : "Next"}
+              textColor="white"
+              width="50%"
+              onPress={onNextPress}
+            />
+          </View>
+
           <LogoutButton />
         </View>
       </View>
@@ -92,5 +110,5 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: "center",
   },
-  buttonText: { color: "white", fontWeight: "600" },
+  buttonText: { color: "black", fontWeight: "600" },
 });
