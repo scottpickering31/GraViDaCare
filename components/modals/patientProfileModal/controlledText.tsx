@@ -1,6 +1,6 @@
 import { fullWizardSchema } from "@/constants/modals/introModal";
 import { Controller, Path, useFormContext } from "react-hook-form";
-import { TextInput } from "react-native";
+import { Text, TextInput } from "react-native";
 import { z } from "zod";
 
 /** 1️⃣  Infer the real object type from the Zod schema */
@@ -24,6 +24,8 @@ export function ControlledText({
     formState: { errors },
   } = useFormContext<FormValues>();
 
+  const errorMsg = errors[name]?.message;
+
   return (
     <>
       <Controller
@@ -43,6 +45,9 @@ export function ControlledText({
           );
         }}
       />
+      {errorMsg && (
+        <Text style={{ color: "red", marginTop: 4 }}>{errorMsg}</Text>
+      )}
     </>
   );
 }

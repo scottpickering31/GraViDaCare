@@ -13,22 +13,22 @@ export const fullWizardSchema = z.object({
   gender: z.string().min(1, "Required"),
 
   /** MEASUREMENTS (optional) */
-  head_circumference_cm: z.number().optional(),
-  weight_kg: z.number().optional(),
-  height_cm: z.number().optional(),
+  head_circumference_cm: z.string().optional(),
+  weight_kg: z.string().optional(),
+  height_cm: z.string().optional(),
 
   /** ALLERGIES (optional) */
-  allergies: z.string().optional(),
+  allergies: z.array(z.string()).optional(),
   emergency_phone: z.string().optional(),
 
   /** NEURO INFO (optional) */
   neurologistName: z.string().optional(),
   hospital: z.string().optional(),
-  rescueMedication: z.string().optional(),
-  rescueMedicationDoseMg: z.number().optional(),
+  rescueMedication: z.array(z.string()).optional(),
+  rescueMedicationDoseMg: z.string().optional(),
 
   /** SEIZURE TYPES (optional for now) */
-  primaryDiagnosis: z.string().optional(),
+  primaryDiagnosis: z.array(z.string()).optional(),
   firstSeizureDate: z.string().optional(),
   seizureTypes: z.array(z.string()).optional(),
 });
@@ -45,16 +45,16 @@ export const defaultIntroModalValues: FormValues = {
   weight_kg: undefined,
   height_cm: undefined,
 
-  allergies: "",
-  emergency_phone: "",
+  allergies: [],
+  emergency_phone: undefined,
 
   neurologistName: "",
   hospital: "",
-  rescueMedication: "",
+  rescueMedication: [],
   rescueMedicationDoseMg: undefined,
 
-  primaryDiagnosis: "",
-  firstSeizureDate: "",
+  primaryDiagnosis: [],
+  firstSeizureDate: undefined,
   seizureTypes: [],
 };
 

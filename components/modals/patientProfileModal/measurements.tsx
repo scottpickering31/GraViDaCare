@@ -1,6 +1,6 @@
 import { ControlledText } from "@/components/modals/patientProfileModal/controlledText";
 
-export default function Measurements() {
+export default function PatientMeasurements() {
   return (
     <>
       <ControlledText name="head_circumference_cm" label="Head Circumference" />
