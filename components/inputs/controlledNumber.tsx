@@ -1,24 +1,16 @@
-import { fullWizardSchema } from "@/constants/modals/introModal";
+import { PatientProfileWizardSchema } from "@/constants/modals/patientProfileModal";
 import { Controller, Path, useFormContext } from "react-hook-form";
 import { Text, TextInput } from "react-native";
 import { z } from "zod";
 
-/** 1️⃣  Infer the real object type from the Zod schema */
-type FormValues = z.infer<typeof fullWizardSchema>; // { firstName: string; … }
+type FormValues = z.infer<typeof PatientProfileWizardSchema>;
 
-type ControlledTextProps = {
-  /** 2️⃣  Constrain “name” to one of the keys of FormValues */
+type ControlledNumberProps = {
   name: Path<FormValues>;
   label?: string;
-  multiline?: boolean;
 };
 
-export function ControlledText({
-  name,
-  label,
-  multiline,
-}: ControlledTextProps) {
-  /** 3️⃣  Tell React‑Hook‑Form what the context’s value type is */
+export function ControlledNumber({ name, label }: ControlledNumberProps) {
   const {
     control,
     formState: { errors },
@@ -35,12 +27,14 @@ export function ControlledText({
           console.log(`${name} value:`, value);
           return (
             <TextInput
-              value={String(value ?? "")}
-              onChangeText={onChange}
-              multiline={multiline}
-              style={{ borderWidth: 1 }}
-              placeholderTextColor={"gray"}
+              value={value !== undefined ? String(value) : ""}
+              onChangeText={(text) => {
+                const parsed = text === "" ? undefined : Number(text);
+                onChange(parsed !== undefined ? parsed : 0);
+              }}
+              keyboardType="numeric"
               placeholder={label}
+              style={{ borderWidth: 1 }}
             />
           );
         }}

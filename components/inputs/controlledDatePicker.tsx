@@ -1,18 +1,21 @@
-import { Controller, Path, useFormContext } from "react-hook-form";
-import { Button, Platform, Text, View } from "react-native";
+import { PatientProfileWizardSchema } from "@/constants/modals/patientProfileModal";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
-import { fullWizardSchema } from "@/constants/modals/introModal";
+import { Controller, Path, useFormContext } from "react-hook-form";
+import { Button, Platform, Text, View } from "react-native";
 import { z } from "zod";
 
-type FormValues = z.infer<typeof fullWizardSchema>;
+type FormValues = z.infer<typeof PatientProfileWizardSchema>;
 
 type ControlledDatePickerProps = {
   name: Path<FormValues>;
   label?: string;
 };
 
-export function ControlledDatePicker({ name, label }: ControlledDatePickerProps) {
+export function ControlledDatePicker({
+  name,
+  label,
+}: ControlledDatePickerProps) {
   const {
     control,
     formState: { errors },
@@ -26,8 +29,10 @@ export function ControlledDatePicker({ name, label }: ControlledDatePickerProps)
       control={control}
       name={name}
       render={({ field: { value, onChange } }) => {
-        const displayDate = value ? new Date(value).toLocaleDateString() : "Select date";
-
+        const displayDate = value
+          ? new Date(value).toLocaleDateString()
+          : "Select date";
+        console.log(`${name} value:`, value);
         return (
           <View style={{ marginVertical: 8 }}>
             <Text style={{ marginBottom: 4 }}>{label}</Text>

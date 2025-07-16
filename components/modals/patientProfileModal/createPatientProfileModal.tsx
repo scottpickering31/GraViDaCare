@@ -1,5 +1,11 @@
 import LogoutButton from "@/app/auth/logout";
 import ButtonComponent from "@/components/buttons/buttonComponent";
+import { ControlledDatePicker } from "@/components/inputs/controlledDatePicker";
+import { ControlledMultiSelect } from "@/components/inputs/controlledMultiSelect";
+import { ControlledNumber } from "@/components/inputs/controlledNumber";
+import { ControlledSelect } from "@/components/inputs/controlledSelect";
+import { ControlledText } from "@/components/inputs/controlledText";
+import { PatientProfileModalSteps } from "@/constants/modals/patientProfileModal";
 import { Colors } from "@/constants/styles/Colors";
 import React from "react";
 import {
@@ -14,21 +20,17 @@ import {
 interface Props {
   headingText: string;
   patientModalStyles?: StyleProp<ViewStyle>;
-  children: React.ReactNode;
   onNextPress: () => void;
   onBackPress: () => void;
   canGoBack: boolean;
-  onSkipPress?: () => void;
   isLast: boolean;
 }
 
 // createPatientProfileModal.tsx
 export default function CreatePatientProfileModal({
   headingText,
-  children,
   onNextPress,
   onBackPress,
-  onSkipPress,
   isLast,
   canGoBack,
 }: Props) {
@@ -37,19 +39,37 @@ export default function CreatePatientProfileModal({
       <View style={styles.overlay}>
         <View style={styles.card}>
           <Text style={styles.heading}>{headingText}</Text>
-          {children}
+          {PatientProfileModalSteps.map((step) => {
+            return (
+              <View key={step.step}>
+                {step.type === "text" && (
+                  <ControlledText name={step.name} label={step.title} />
+                )}
+                {step.type === "number" && (
+                  <ControlledNumber name={step.name} label={step.title} />
+                )}
+                {step.type === "date" && (
+                  <ControlledDatePicker name={step.name} label={step.title} />
+                )}
+                {step.type === "selector" && (
+                  <ControlledSelect
+                    name={step.name}
+                    label={step.title}
+                    options={step.options}
+                  />
+                )}
+                {step.type === "multi-select" && (
+                  <ControlledMultiSelect
+                    name={step.name}
+                    label={step.title}
+                    options={step.options}
+                  />
+                )}
+              </View>
+            );
+          })}
 
           <View style={{ flexDirection: "column", gap: 8 }}>
-            {onSkipPress && (
-              <ButtonComponent
-                backgroundColor={Colors.gray[100]}
-                title="Skip"
-                width="50%"
-                textColor="black"
-                onPress={onSkipPress}
-              />
-            )}
-
             {canGoBack && (
               <ButtonComponent
                 backgroundColor={Colors.primary[500]}
