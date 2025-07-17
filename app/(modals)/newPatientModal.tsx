@@ -25,7 +25,7 @@ export default function NewPatientModal() {
   /** Validate only the fields that belong to the current step */
   const validateCurrentStep = async () => {
     const { trigger } = methods;
-    return trigger();
+    return trigger(currentStep.name as any); // `name` is a string key
   };
 
   /** NEXT / SUBMIT */
@@ -53,6 +53,7 @@ export default function NewPatientModal() {
     <FormProvider {...methods}>
       <CreatePatientProfileModal
         headingText={currentStep.title}
+        currentStep={currentStep}
         onNextPress={handleNext}
         onBackPress={handleBack}
         isLast={isLast}

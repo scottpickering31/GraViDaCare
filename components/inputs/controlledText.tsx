@@ -1,10 +1,10 @@
-import { PatientProfileWizardSchema, PatientProfileModalSteps } from "@/constants/modals/patientProfileModal";
+import { PatientProfileWizardSchema } from "@/constants/modals/patientProfileModal";
 import { Controller, Path, useFormContext } from "react-hook-form";
 import { Text, TextInput } from "react-native";
 import { z } from "zod";
 
 /** 1️⃣  Infer the real object type from the Zod schema */
-type FormValues = z.infer<typeof PatientProfileWizardSchema>; 
+type FormValues = z.infer<typeof PatientProfileWizardSchema>;
 
 type ControlledTextProps = {
   /** 2️⃣  Constrain “name” to one of the keys of FormValues */
@@ -40,7 +40,7 @@ export function ControlledText({
               value={String(value ?? "")}
               onChangeText={onChange}
               multiline={multiline}
-              style={{ borderWidth: 1 }}
+              style={{ borderWidth: 1, height: multiline ? 100 : 40 }}
               placeholderTextColor={"gray"}
               placeholder={label}
               keyboardType={keyboardType}

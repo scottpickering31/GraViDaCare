@@ -29,8 +29,6 @@ export function ControlledSelect({
       name={name}
       render={({ field: { value, onChange } }) => (
         <View style={{ marginVertical: 8 }}>
-          {label && <Text style={{ marginBottom: 4 }}>{label}</Text>}
-
           {options.map((opt) => {
             const isSelected = value === opt;
             return (
@@ -42,6 +40,7 @@ export function ControlledSelect({
                   marginVertical: 4,
                   backgroundColor: isSelected ? "#cce5ff" : "#f0f0f0",
                   borderRadius: 8,
+                  borderWidth: 1,
                 }}
               >
                 <Text>{opt}</Text>

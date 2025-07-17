@@ -57,69 +57,67 @@ export const PatientProfileWizardValues: FormValues = {
 
 /** Modal Object */
 
-export const PatientProfileModalSteps = [
+type StepType =
+  | {
+      step: number;
+      name: keyof FormValues;
+      title: string;
+      type: "text" | "number" | "date";
+    }
+  | {
+      step: number;
+      name: keyof FormValues;
+      title: string;
+      type: "selector" | "multi-select";
+      options: readonly string[];
+    };
+
+export type PatientProfileStep = StepType;
+
+export const PatientProfileModalSteps: PatientProfileStep[] = [
+  { step: 0, name: "profile_name", title: "Profile Name", type: "text" },
   {
-    title: "Profile name",
-    name: "profile_name",
     step: 1,
-    type: "text",
-  },
-  {
-    title: "Caregiver Role",
     name: "caregiver_role",
-    step: 2,
+    title: "Caregiver Role",
     type: "selector",
     options: caregiverRoles,
   },
+  { step: 2, name: "dob", title: "Date of Birth", type: "date" },
   {
-    title: "Patient Date of Birth",
-    name: "dob",
     step: 3,
-    type: "date",
-  },
-  {
-    title: "Patient Gender",
     name: "gender",
-    step: 4,
+    title: "Gender",
     type: "selector",
     options: genders,
   },
+  { step: 4, name: "weight_kg", title: "Weight (kg)", type: "number" },
+  { step: 5, name: "height_cm", title: "Height (cm)", type: "number" },
   {
-    title: "Patient Weight (kg)",
-    name: "weight_kg",
-    step: 5,
-    type: "number",
-  },
-  {
-    title: "Patient Height (cm)",
-    name: "height_cm",
     step: 6,
-    type: "number",
-  },
-  {
-    title: "Patient Seizure Types",
     name: "seizure_types",
-    step: 7,
+    title: "Seizure Types",
     type: "multi-select",
     options: seizureTypes,
   },
   {
-    title: "First Recorded Seizure Date",
+    step: 7,
     name: "first_seizure_date",
-    step: 8,
+    title: "First Seizure Date",
     type: "date",
   },
   {
-    title: "Seizure Frequency",
+    step: 8,
     name: "seizure_frequency",
-    step: 9,
-    type: "number",
+    title: "Seizure Frequency",
+    type: "selector",
+    options: seizureFrequencies,
   },
   {
-    title: "Rescue Medication",
+    step: 9,
     name: "rescue_medication",
-    step: 10,
+    title: "Rescue Medication",
     type: "multi-select",
     options: rescueMedications,
   },
-] as const;
+];

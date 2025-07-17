@@ -8,7 +8,7 @@ type FormValues = z.infer<typeof PatientProfileWizardSchema>;
 type ControlledMultiSelectProps = {
   name: Path<FormValues>;
   label?: string;
-  options: readonly string[];
+  options: string[];
 };
 
 export function ControlledMultiSelect({
@@ -40,8 +40,6 @@ export function ControlledMultiSelect({
 
         return (
           <View style={{ marginVertical: 8 }}>
-            {label && <Text style={{ marginBottom: 4 }}>{label}</Text>}
-
             {options.map((opt) => {
               const isSelected = selectedValues.includes(opt);
               return (
@@ -59,7 +57,6 @@ export function ControlledMultiSelect({
                 </TouchableOpacity>
               );
             })}
-
             {errorMsg && (
               <Text style={{ color: "red", marginTop: 4 }}>{errorMsg}</Text>
             )}
