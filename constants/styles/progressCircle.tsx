@@ -1,9 +1,9 @@
-import { AnimatedCircularProgress } from "react-native-circular-progress";
 import React from "react";
+import { AnimatedCircularProgress } from "react-native-circular-progress";
 
 interface Props {
-  step: number; 
-  totalSteps: number; 
+  step: number;
+  totalSteps: number;
 }
 
 export default function AnimatedProgressCircle({ step, totalSteps }: Props) {
@@ -11,12 +11,12 @@ export default function AnimatedProgressCircle({ step, totalSteps }: Props) {
 
   return (
     <AnimatedCircularProgress
-      size={120}
+      size={75}
       width={15}
       fill={fill}
       tintColor="#00e0ff"
       backgroundColor="#3d5875"
-      duration={400} 
+      duration={400}
     />
   );
 }

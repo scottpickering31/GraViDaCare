@@ -43,15 +43,17 @@ export default function CreatePatientProfileModal({
     <Modal animationType="slide" transparent>
       <View style={styles.overlay}>
         <View style={styles.card}>
-          <AnimatedProgressCircle
-            step={currentStep.step}
-            totalSteps={PatientProfileModalSteps.length}
-          />
-          <View style={styles.heading}>
-            <Text style={styles.headingText}>{headingText}</Text>
+          <View style={styles.progress}>
+            <AnimatedProgressCircle
+              step={currentStep.step}
+              totalSteps={PatientProfileModalSteps.length}
+            />
           </View>
           <View style={styles.innerCard}>
             <View>
+              <Text style={styles.headingText}>{headingText}</Text>
+            </View>
+            <View style={styles.form}>
               {currentStep.type === "text" && (
                 <ControlledText
                   name={currentStep.name}
@@ -85,25 +87,25 @@ export default function CreatePatientProfileModal({
                 />
               )}
             </View>
+            <View style={styles.navigationButtons}>
+              {canGoBack && (
+                <ButtonComponent
+                  backgroundColor={Colors.primary[500]}
+                  title="Back"
+                  textColor="white"
+                  onPress={onBackPress}
+                  width="45%"
+                />
+              )}
+              <ButtonComponent
+                backgroundColor={Colors.primary[500]}
+                title={isLast ? "Submit" : "Next"}
+                textColor="white"
+                onPress={onNextPress}
+                width="45%"
+              />
+            </View>
           </View>
-        </View>
-        <View style={styles.navigationButtons}>
-          {canGoBack && (
-            <ButtonComponent
-              backgroundColor={Colors.primary[500]}
-              title="Back"
-              textColor="white"
-              onPress={onBackPress}
-              width="40%"
-            />
-          )}
-          <ButtonComponent
-            backgroundColor={Colors.primary[500]}
-            title={isLast ? "Submit" : "Next"}
-            textColor="white"
-            onPress={onNextPress}
-            width="40%"
-          />
         </View>
       </View>
     </Modal>
@@ -114,9 +116,7 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.55)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
+    padding: 20,
   },
   card: {
     height: "100%",
@@ -126,10 +126,20 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 16,
   },
-  innerCard: {
-    flex: 3,
+  form: {
+    width: "100%",
   },
-  heading: { flex: 1 },
+  innerCard: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 20,
+    flex: 1,
+  },
+  progress: {
+    position: "absolute",
+    right: 0,
+    padding: 10,
+  },
   headingText: { fontSize: 18, fontWeight: "700", textAlign: "center" },
   input: {
     borderWidth: 1,
@@ -153,11 +163,10 @@ const styles = StyleSheet.create({
   buttonText: { color: "black", fontWeight: "600" },
   navigationButtons: {
     flexDirection: "row",
-    flex: 1,
     justifyContent: "space-between",
     position: "absolute",
-    bottom: 30,
+    bottom: 0,
+    gap: 5,
     width: "100%",
-    paddingHorizontal: 20,
   },
 });

@@ -40,9 +40,13 @@ export function ControlledText({
               value={String(value ?? "")}
               onChangeText={onChange}
               multiline={multiline}
-              style={{ borderWidth: 1, height: multiline ? 100 : 40 }}
+              style={{
+                borderWidth: 1,
+                height: multiline ? 100 : 40,
+                borderRadius: 8,
+              }}
               placeholderTextColor={"gray"}
-              placeholder={label}
+              placeholder={"Enter " + label}
               keyboardType={keyboardType}
             />
           );

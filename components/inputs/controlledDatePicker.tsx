@@ -35,7 +35,6 @@ export function ControlledDatePicker({
         console.log(`${name} value:`, value);
         return (
           <View style={{ marginVertical: 8 }}>
-            <Text style={{ marginBottom: 4 }}>{label}</Text>
             <Button title={displayDate} onPress={() => setShow(true)} />
 
             {show && (
