@@ -11,8 +11,8 @@ export default function AnimatedProgressCircle({ step, totalSteps }: Props) {
 
   return (
     <AnimatedCircularProgress
-      size={75}
-      width={15}
+      size={60}
+      width={10}
       fill={fill}
       tintColor="#00e0ff"
       backgroundColor="#3d5875"

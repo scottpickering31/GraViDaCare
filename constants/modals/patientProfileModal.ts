@@ -31,8 +31,9 @@ export const PatientProfileWizardSchema = z.object({
   caregiver_role: z.string().min(1, "Required"),
   dob: z.string().min(1, "Required"),
   gender: z.string().min(1, "Required"),
-  weight_kg: z.number().optional(),
-  height_cm: z.number().optional(),
+  weight_kg: z.number().positive("Must be greater than 0").min(1, "Required"),
+
+  height_cm: z.number().positive("Must be greater than 0").min(1, "Required"),
   seizure_types: z.array(z.enum(seizureTypes)).min(1, "Required"),
   first_seizure_date: z.string().optional(),
   seizure_frequency: z.string().optional(),
@@ -75,7 +76,12 @@ type StepType =
 export type PatientProfileStep = StepType;
 
 export const PatientProfileModalSteps: PatientProfileStep[] = [
-  { step: 0, name: "profile_name", title: "Patient Profile Name", type: "text" },
+  {
+    step: 0,
+    name: "profile_name",
+    title: "Patient Profile Name",
+    type: "text",
+  },
   {
     step: 1,
     name: "caregiver_role",

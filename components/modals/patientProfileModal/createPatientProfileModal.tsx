@@ -1,17 +1,14 @@
 import ButtonComponent from "@/components/buttons/buttonComponent";
-import { ControlledDatePicker } from "@/components/inputs/controlledDatePicker";
-import { ControlledMultiSelect } from "@/components/inputs/controlledMultiSelect";
-import { ControlledNumber } from "@/components/inputs/controlledNumber";
-import { ControlledSelect } from "@/components/inputs/controlledSelect";
-import { ControlledText } from "@/components/inputs/controlledText";
+import { ControlledField } from "@/components/inputs/controlledField";
 import {
   PatientProfileModalSteps,
   PatientProfileStep,
 } from "@/constants/modals/patientProfileModal";
 import { Colors } from "@/constants/styles/Colors";
 import AnimatedProgressCircle from "@/constants/styles/progressCircle";
-import React from "react";
+import React, { useState } from "react";
 import {
+  Image,
   Modal,
   StyleProp,
   StyleSheet,
@@ -39,72 +36,54 @@ export default function CreatePatientProfileModal({
   canGoBack,
   currentStep,
 }: Props) {
+  const [dropdownVisible, setDropdownVisible] = useState(false); // State in parent
+
   return (
     <Modal animationType="slide" transparent>
       <View style={styles.overlay}>
         <View style={styles.card}>
           <View style={styles.progress}>
+            <Image
+              source={require("@/assets/icons/GraViDaCareLogo.png")}
+              style={{ height: 150, width: 150 }}
+            />
             <AnimatedProgressCircle
               step={currentStep.step}
               totalSteps={PatientProfileModalSteps.length}
             />
           </View>
           <View style={styles.innerCard}>
-            <View>
-              <Text style={styles.headingText}>{headingText}</Text>
-            </View>
+            {/* Conditionally hide heading if dropdown is open */}
+            {!(dropdownVisible && currentStep.type === "selector") && (
+              <View>
+                <Text style={styles.headingText}>{headingText}</Text>
+              </View>
+            )}
             <View style={styles.form}>
-              {currentStep.type === "text" && (
-                <ControlledText
-                  name={currentStep.name}
-                  label={currentStep.title}
-                />
-              )}
-              {currentStep.type === "number" && (
-                <ControlledNumber
-                  name={currentStep.name}
-                  label={currentStep.title}
-                />
-              )}
-              {currentStep.type === "date" && (
-                <ControlledDatePicker
-                  name={currentStep.name}
-                  label={currentStep.title}
-                />
-              )}
-              {currentStep.type === "selector" && (
-                <ControlledSelect
-                  name={currentStep.name}
-                  label={currentStep.title}
-                  options={currentStep.options}
-                />
-              )}
-              {currentStep.type === "multi-select" && (
-                <ControlledMultiSelect
-                  name={currentStep.name}
-                  label={currentStep.title}
-                  options={[...currentStep.options]}
-                />
-              )}
-            </View>
-            <View style={styles.navigationButtons}>
-              {canGoBack && (
-                <ButtonComponent
-                  backgroundColor={Colors.primary[500]}
-                  title="Back"
-                  textColor="white"
-                  onPress={onBackPress}
-                  width="45%"
-                />
-              )}
-              <ButtonComponent
-                backgroundColor={Colors.primary[500]}
-                title={isLast ? "Submit" : "Next"}
-                textColor="white"
-                onPress={onNextPress}
-                width="45%"
+              <ControlledField
+                step={currentStep}
+                dropdownVisible={dropdownVisible}
+                setDropdownVisible={setDropdownVisible}
               />
             </View>
+          </View>
+          <View style={styles.navigationButtons}>
+            {canGoBack && (
+              <ButtonComponent
+                backgroundColor={Colors.primary[500]}
+                title="Back"
+                textColor="white"
+                onPress={onBackPress}
+                width="45%"
+              />
+            )}
+            <ButtonComponent
+              backgroundColor={Colors.primary[500]}
+              title={isLast ? "Submit" : "Next"}
+              textColor="white"
+              onPress={onNextPress}
+              width="45%"
+            />
           </View>
         </View>
       </View>
@@ -119,11 +98,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   card: {
-    height: "100%",
-    width: "100%",
+    flex: 1,
     borderRadius: 12,
     backgroundColor: "#fff",
-    padding: 20,
+    borderColor: Colors.primary[100],
+    borderWidth: 3,
     gap: 16,
   },
   form: {
@@ -132,12 +111,16 @@ const styles = StyleSheet.create({
   innerCard: {
     alignItems: "center",
     justifyContent: "center",
-    gap: 20,
+    gap: 10,
     flex: 1,
+    margin: 15,
   },
   progress: {
     position: "absolute",
-    right: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
     padding: 10,
   },
   headingText: { fontSize: 18, fontWeight: "700", textAlign: "center" },
@@ -166,7 +149,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     position: "absolute",
     bottom: 0,
-    gap: 5,
+    padding: 20,
+    flex: 2,
     width: "100%",
   },
 });
