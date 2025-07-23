@@ -235,14 +235,14 @@ export default function GetStarted() {
               href="/legal/termsAndConditions"
               style={{ color: Colors.primary[500] }}
             >
-              Terms of Service
-            </Link>{" "}
-            and{" "}
+              <Text>Terms of Service</Text>
+            </Link>
+            <Text> and </Text>
             <Link
               href="/legal/privacyPolicyScreen"
               style={{ color: Colors.primary[500] }}
             >
-              Privacy Policy
+              <Text>Privacy Policy</Text>
             </Link>
           </Text>
         </View>

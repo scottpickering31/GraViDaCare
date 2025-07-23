@@ -5,7 +5,11 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { Alert, View } from "react-native";
 
-export default function LogoutButton() {
+interface LogoutButtonProps {
+  width: `${number}%`;
+}
+
+export default function LogoutButton({ width }: LogoutButtonProps) {
   const [busy, setBusy] = useState(false);
 
   const handleLogout = async () => {
@@ -30,7 +34,7 @@ export default function LogoutButton() {
         onPress={handleLogout}
         textColor="white"
         title={busy ? "Logging out…" : "Click here to log out"}
-        width="100%"
+        width={width}
       />
     </View>
   );

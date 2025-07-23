@@ -20,6 +20,8 @@ const seizureFrequencies = [
   "seizure_frequency_3",
 ] as const;
 
+const videoRecordings = ["Yes", "No"] as const;
+
 const rescueMedications = [
   "rescue_medicine_1",
   "rescue_medicine_2",
@@ -38,6 +40,7 @@ export const PatientProfileWizardSchema = z.object({
   first_seizure_date: z.string().optional(),
   seizure_frequency: z.string().optional(),
   rescue_medication: z.array(z.enum(rescueMedications)).min(1, "Required"),
+  video_recordings: z.string().min(1, "Required"),
 });
 
 export type FormValues = z.infer<typeof PatientProfileWizardSchema>;
@@ -48,12 +51,13 @@ export const PatientProfileWizardValues: FormValues = {
   caregiver_role: "Self",
   dob: "",
   gender: "Male",
-  weight_kg: undefined,
-  height_cm: undefined,
+  weight_kg: 0,
+  height_cm: 0,
   seizure_types: [],
   first_seizure_date: "",
   seizure_frequency: undefined,
   rescue_medication: [],
+  video_recordings: "",
 };
 
 /** Modal Object */
@@ -79,51 +83,73 @@ export const PatientProfileModalSteps: PatientProfileStep[] = [
   {
     step: 0,
     name: "profile_name",
-    title: "Patient Profile Name",
+    title: "What’s the patient’s name or profile name?",
     type: "text",
   },
   {
     step: 1,
     name: "caregiver_role",
-    title: "Your Caregiver Role",
+    title: "What is your relationship to the patient?",
     type: "selector",
     options: caregiverRoles,
   },
-  { step: 2, name: "dob", title: "Patient Date of Birth", type: "date" },
+  {
+    step: 2,
+    name: "dob",
+    title: "Date of birth of the patient?",
+    type: "date",
+  },
   {
     step: 3,
     name: "gender",
-    title: "Patient Gender",
+    title: "What is the patient’s biological sex or gender identity",
     type: "selector",
     options: genders,
   },
-  { step: 4, name: "weight_kg", title: "Patient Weight (kg)", type: "number" },
-  { step: 5, name: "height_cm", title: "Patient Height (cm)", type: "number" },
+  {
+    step: 4,
+    name: "weight_kg",
+    title: "What is the patient’s weight (kg)?",
+    type: "number",
+  },
+  {
+    step: 5,
+    name: "height_cm",
+    title: "What is the patient’s height (cm)?",
+    type: "number",
+  },
   {
     step: 6,
     name: "seizure_types",
-    title: "Patient Seizure Types",
+    title: "What types of seizures does the patient experience?",
     type: "multi-select",
     options: seizureTypes,
   },
   {
     step: 7,
     name: "first_seizure_date",
-    title: "Patient First Seizure Date",
+    title: "When did the first seizure occur?",
     type: "date",
   },
   {
     step: 8,
     name: "seizure_frequency",
-    title: "Patient Seizure Frequency",
+    title: "How often do seizures typically happen?",
     type: "selector",
     options: seizureFrequencies,
   },
   {
     step: 9,
     name: "rescue_medication",
-    title: "Patient Rescue Medication",
+    title: "Is there a prescribed rescue medication?",
     type: "multi-select",
     options: rescueMedications,
+  },
+  {
+    step: 10,
+    name: "video_recordings",
+    title: "Would you like to track seizures with video recordings?",
+    type: "selector",
+    options: videoRecordings,
   },
 ];

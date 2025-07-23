@@ -38,7 +38,7 @@ export function ControlledNumber({ name, label }: ControlledNumberProps) {
         }, [value, name]);
 
         const handleChange = (text: string) => {
-          if (/^\d*\.?\d{0,1}$/.test(text)) {
+          if (/^\d*\.?\d{0,3}$/.test(text)) {
             setInput(text);
             const parsed = parseFloat(text);
             if (!text.endsWith(".") && !isNaN(parsed)) {
