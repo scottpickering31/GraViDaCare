@@ -1,4 +1,4 @@
-import { useHandleSupabaseSession } from "@/hooks/useHandleSupabaseSession";
+import { useHandleSupabaseSession } from "@/api/sessions/useHandleSupabaseSession";
 import { supabase } from "@/lib/supabase";
 import {
   GoogleSignin,

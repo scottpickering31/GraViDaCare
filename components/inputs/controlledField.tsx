@@ -8,18 +8,12 @@ import { PatientProfileStep } from "@/constants/modals/patientProfileModal";
 
 type Props = {
   step: PatientProfileStep;
-  dropdownVisible: boolean;
-  setDropdownVisible: (visible: boolean) => void;
 };
 
-export function ControlledField({
-  step,
-  dropdownVisible,
-  setDropdownVisible,
-}: Props) {
+export function ControlledField({ step }: Props) {
   switch (step.type) {
     case "text":
-      return <ControlledText name={step.name} label={step.title} />;
+      return <ControlledText name={step.name} label={step.placeholder} />;
     case "number":
       return <ControlledNumber name={step.name} label={step.title} />;
     case "date":
@@ -30,8 +24,6 @@ export function ControlledField({
           name={step.name}
           label={step.title}
           options={step.options}
-          dropdownVisible={dropdownVisible}
-          setDropdownVisible={setDropdownVisible}
         />
       );
     case "multi-select":
@@ -40,6 +32,7 @@ export function ControlledField({
           name={step.name}
           label={step.title}
           options={[...step.options]}
+          key={step.name} 
         />
       );
     default:

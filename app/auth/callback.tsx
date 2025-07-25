@@ -1,11 +1,11 @@
 /* app/auth/callback.tsx */
-import React from "react";
-import { ActivityIndicator, View, Text } from "react-native";
-import { useURLStore } from "@/store/urlStore";
-import { useFirstAuthUrl } from "@/hooks/useFirstAuthUrl";
+import { useFirstAuthUrl } from "@/api/sessions/useFirstAuthUrl";
+import { useHandleSupabaseSession } from "@/api/sessions/useHandleSupabaseSession";
 import { createSessionFromUrl } from "@/constants/createSessionFromUrl";
+import { useURLStore } from "@/store/urlStore";
 import { router } from "expo-router";
-import { useHandleSupabaseSession } from "@/hooks/useHandleSupabaseSession";
+import React from "react";
+import { ActivityIndicator, Text, View } from "react-native";
 
 export default function AuthCallback() {
   const hotUrl = useURLStore((s) => s.url);

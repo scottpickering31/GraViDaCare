@@ -1,8 +1,8 @@
+import { useGetPatientProfiles } from "@/api/patients/useGetPatientProfiles";
 import ButtonComponent from "@/components/buttons/buttonComponent";
 import { Colors } from "@/constants/styles/Colors";
-import { usePatients } from "@/hooks/api/usePatients";
 import { useAuthStore } from "@/store/authStore";
-import { Redirect, router, usePathname } from "expo-router";
+import { Redirect, router } from "expo-router";
 import React, { useState } from "react";
 import {
   Pressable,
@@ -26,7 +26,6 @@ export default function TabTemplate({
   showHeadingText,
 }: TabTemplateProps) {
   const { session } = useAuthStore();
-  const pathname = usePathname();
 
   const fullName = session?.user.user_metadata?.full_name;
   const email = session?.user.email;
@@ -51,7 +50,7 @@ export default function TabTemplate({
     refetch,
     isRefetching,
     error,
-  } = usePatients();
+  } = useGetPatientProfiles();
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -85,7 +84,7 @@ export default function TabTemplate({
             <Text>Loading data…</Text>
           ) : error ? (
             <Text>Error loading data</Text>
-          ) : patients.length === 0 && pathname !== "/auth/account" ? (
+          ) : patients.length === 0 ? (
             <View style={styles.buttonContainer}>
               <ButtonComponent
                 backgroundColor={Colors.primary[500]}
@@ -103,7 +102,7 @@ export default function TabTemplate({
               />
             </View>
           ) : (
-            <>{children}</>
+            <View>{children}</View>
           )}
         </View>
       </ScrollView>

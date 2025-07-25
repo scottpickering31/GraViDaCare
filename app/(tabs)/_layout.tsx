@@ -54,6 +54,16 @@ export default function TabsLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="patientProfiles"
+        options={{
+          title: "Profiles",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Ionicons name={focused ? "person" : "person-outline"} size={24} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

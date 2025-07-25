@@ -46,7 +46,7 @@ export function ControlledText({
                 borderRadius: 8,
               }}
               placeholderTextColor={"gray"}
-              placeholder={"Enter " + label}
+              placeholder={label}
               keyboardType={keyboardType}
             />
           );

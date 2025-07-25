@@ -6,7 +6,7 @@ import {
 } from "@/constants/modals/patientProfileModal";
 import { Colors } from "@/constants/styles/Colors";
 import AnimatedProgressCircle from "@/constants/styles/progressCircle";
-import React, { useState } from "react";
+import React from "react";
 import {
   Image,
   Modal,
@@ -36,8 +36,6 @@ export default function CreatePatientProfileModal({
   canGoBack,
   currentStep,
 }: Props) {
-  const [dropdownVisible, setDropdownVisible] = useState(false); // State in parent
-
   return (
     <Modal animationType="slide" transparent>
       <View style={styles.overlay}>
@@ -53,18 +51,11 @@ export default function CreatePatientProfileModal({
             />
           </View>
           <View style={styles.innerCard}>
-            {/* Conditionally hide heading if dropdown is open */}
-            {!(dropdownVisible && currentStep.type === "selector") && (
-              <View>
-                <Text style={styles.headingText}>{headingText}</Text>
-              </View>
-            )}
+            <View>
+              <Text style={styles.headingText}>{headingText}</Text>
+            </View>
             <View style={styles.form}>
-              <ControlledField
-                step={currentStep}
-                dropdownVisible={dropdownVisible}
-                setDropdownVisible={setDropdownVisible}
-              />
+              <ControlledField step={currentStep} />
             </View>
           </View>
           <View style={styles.navigationButtons}>
@@ -95,7 +86,7 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.55)",
-    padding: 20,
+    padding: 10,
   },
   card: {
     flex: 1,
@@ -150,7 +141,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     padding: 20,
-    flex: 2,
     width: "100%",
   },
 });

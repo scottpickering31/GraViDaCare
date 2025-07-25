@@ -1,6 +1,7 @@
 import { PatientProfileWizardSchema } from "@/constants/modals/patientProfileModal";
+import { useState } from "react";
 import { Controller, Path, useFormContext } from "react-hook-form";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { z } from "zod";
 
 type FormValues = z.infer<typeof PatientProfileWizardSchema>;
@@ -9,21 +10,15 @@ type ControlledSelectProps = {
   name: Path<FormValues>;
   label?: string;
   options: readonly string[];
-  dropdownVisible: boolean;
-  setDropdownVisible: (v: boolean) => void;
 };
 
-export function ControlledSelect({
-  name,
-  options,
-  label,
-  dropdownVisible,
-  setDropdownVisible,
-}: ControlledSelectProps) {
+export function ControlledSelect({ name, options }: ControlledSelectProps) {
   const {
     control,
     formState: { errors },
   } = useFormContext<FormValues>();
+
+  const [dropDownVisible, setDropDownVisible] = useState(false);
 
   const errorMsg = errors[name]?.message;
 
@@ -32,12 +27,11 @@ export function ControlledSelect({
       control={control}
       name={name}
       render={({ field: { value, onChange } }) => {
-        console.log(`${name} value:`, value);
         return (
           <View style={{ marginVertical: 8 }}>
-            {!dropdownVisible && (
+            {!dropDownVisible && (
               <TouchableOpacity
-                onPress={() => setDropdownVisible(!dropdownVisible)}
+                onPress={() => setDropDownVisible(true)}
                 style={{
                   padding: 12,
                   borderWidth: 1,
@@ -48,9 +42,15 @@ export function ControlledSelect({
                 <Text>{value || "Select an option"}</Text>
               </TouchableOpacity>
             )}
-
-            {dropdownVisible && (
-              <View style={{ marginTop: 8 }}>
+            {dropDownVisible && (
+              <ScrollView
+                persistentScrollbar={true}
+                style={{
+                  maxHeight: 300,
+                  borderWidth: 1,
+                  borderRadius: 8,
+                }}
+              >
                 {options.map((opt) => {
                   const isSelected = value === opt;
                   return (
@@ -58,23 +58,21 @@ export function ControlledSelect({
                       key={opt}
                       onPress={() => {
                         onChange(opt);
-                        setDropdownVisible(false);
+                        setDropDownVisible(false);
                       }}
                       style={{
                         padding: 12,
-                        marginVertical: 2,
                         backgroundColor: isSelected ? "#cce5ff" : "#ffffff",
-                        borderRadius: 6,
-                        borderWidth: 1,
+                        borderBottomWidth: 1,
+                        borderColor: "#eee",
                       }}
                     >
                       <Text>{opt}</Text>
                     </TouchableOpacity>
                   );
                 })}
-              </View>
+              </ScrollView>
             )}
-
             {errorMsg && (
               <Text style={{ color: "red", marginTop: 4 }}>{errorMsg}</Text>
             )}

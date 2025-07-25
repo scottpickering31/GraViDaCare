@@ -1,3 +1,4 @@
+import LoadingSkeleton from "@/components/ui/loading/LoadingSkeleton";
 import TabTemplate from "@/components/ui/tabs/tabTemplate";
 import { useAuthStore } from "@/store/authStore";
 import React from "react";
@@ -8,8 +9,9 @@ export default function DashboardGate() {
 
   const meta = session?.user.user_metadata ?? {};
 
-  return (
+  return (  
     <TabTemplate headingText="Dashboard" showHeadingText={false}>
+      <LoadingSkeleton />
       <View></View>
     </TabTemplate>
   );

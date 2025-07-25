@@ -1,6 +1,6 @@
 import { PatientProfileWizardSchema } from "@/constants/modals/patientProfileModal";
 import { Controller, Path, useFormContext } from "react-hook-form";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { z } from "zod";
 
 type FormValues = z.infer<typeof PatientProfileWizardSchema>;
@@ -28,35 +28,39 @@ export function ControlledMultiSelect({
       control={control}
       name={name}
       render={({ field: { value, onChange } }) => {
-        const selectedValues = Array.isArray(value) ? value : [];
+        const selectedValues: string[] = Array.isArray(value) ? [...value] : [];
 
         const toggleValue = (option: string) => {
-          if (selectedValues.includes(option)) {
-            onChange(selectedValues.filter((v) => v !== option));
-          } else {
-            onChange([...selectedValues, option]);
-          }
+          const updated = selectedValues.includes(option)
+            ? selectedValues.filter((v) => v !== option)
+            : [...selectedValues, option];
+
+          onChange(updated);
         };
 
         return (
           <View style={{ marginVertical: 8 }}>
-            {options.map((opt) => {
-              const isSelected = selectedValues.includes(opt);
-              return (
-                <TouchableOpacity
-                  key={opt}
-                  onPress={() => toggleValue(opt)}
-                  style={{
-                    padding: 12,
-                    marginVertical: 4,
-                    backgroundColor: isSelected ? "#cce5ff" : "#f0f0f0",
-                    borderRadius: 8,
-                  }}
-                >
-                  <Text>{opt}</Text>
-                </TouchableOpacity>
-              );
-            })}
+            <ScrollView style={{ maxHeight: 300 }} persistentScrollbar={true}>
+              {options.map((opt) => {
+                const isSelected = selectedValues.includes(opt);
+                return (
+                  <TouchableOpacity
+                    key={opt}
+                    onPress={() => toggleValue(opt)}
+                    style={{
+                      padding: 12,
+                      marginVertical: 4,
+                      backgroundColor: isSelected ? "#cce5ff" : "#f0f0f0",
+                      borderRadius: 8,
+                      borderWidth: 1,
+                      borderColor: "#ccc",
+                    }}
+                  >
+                    <Text>{opt}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
             {errorMsg && (
               <Text style={{ color: "red", marginTop: 4 }}>{errorMsg}</Text>
             )}

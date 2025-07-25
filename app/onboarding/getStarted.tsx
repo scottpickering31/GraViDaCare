@@ -15,12 +15,12 @@ import {
 } from "react-native";
 import { z } from "zod";
 
+import { useHandleSupabaseSession } from "@/api/sessions/useHandleSupabaseSession";
 import {
   configureGoogle,
   useGoogleSignIn,
 } from "@/components/auth/googleSignIn";
 import { createSessionFromUrl } from "@/constants/createSessionFromUrl";
-import { useHandleSupabaseSession } from "@/hooks/useHandleSupabaseSession";
 import { supabase } from "@/lib/supabase";
 
 import EmailIcon from "@/assets/icons/EmailIcon.svg";
