@@ -18,12 +18,14 @@ interface TabTemplateProps {
   children: React.ReactNode;
   headingText: string;
   showHeadingText?: boolean;
+  showProfileAvatar?: boolean;
 }
 
 export default function TabTemplate({
   children,
   headingText,
   showHeadingText,
+  showProfileAvatar,
 }: TabTemplateProps) {
   const { session } = useAuthStore();
 
@@ -70,21 +72,23 @@ export default function TabTemplate({
       >
         <View style={styles.header}>
           {showHeadingText !== false && <Text>{headingText}</Text>}
-          <Pressable
-            style={styles.profileButton}
-            onPress={() => {
-              router.push("/auth/account");
-            }}
-          >
-            <Text>{upperInitials}</Text>
-          </Pressable>
+          {showProfileAvatar && (
+            <Pressable
+              style={styles.profileButton}
+              onPress={() => {
+                router.push("/auth/account");
+              }}
+            >
+              <Text>{upperInitials}</Text>
+            </Pressable>
+          )}
         </View>
         <View style={styles.container}>
           {isLoading ? (
             <Text>Loading data…</Text>
           ) : error ? (
             <Text>Error loading data</Text>
-          ) : patients.length === 0 ? (
+          ) : patients && patients.length === 0 ? (
             <View style={styles.buttonContainer}>
               <ButtonComponent
                 backgroundColor={Colors.primary[500]}

@@ -1,11 +1,11 @@
 import React from "react";
-import { Text } from "react-native";
 import TabTemplate from "@/components/ui/tabs/tabTemplate";
+import LoadingSkeleton from "@/components/ui/loading/LoadingSkeleton";
 
 export default function Log() {
   return (
-    <TabTemplate headingText="Log">
-    <Text>Log</Text>
+    <TabTemplate headingText="Log" showProfileAvatar={true}>
+          <LoadingSkeleton />
   </TabTemplate>
   );
 }

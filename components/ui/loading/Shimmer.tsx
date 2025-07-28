@@ -1,3 +1,5 @@
+// components/ui/loading/Shimmer.tsx
+import { useIsFocused } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import React from "react";
@@ -14,6 +16,8 @@ export const Shimmer = ({
   height = 20,
   borderRadius = 8,
 }: ShimmerProps) => {
+  const isFocused = useIsFocused(); // detect screen focus
+
   const style = {
     width,
     height,
@@ -21,11 +25,15 @@ export const Shimmer = ({
   } as ViewStyle;
 
   return (
-    <View style={[styles.container, style]}>
+    <View
+      key={isFocused ? "focused" : "unfocused"}
+      style={[styles.container, style]}
+    >
       <MotiView
         from={{ translateX: -200 }}
         animate={{ translateX: 200 }}
         transition={{
+          repeat: Infinity,
           loop: true,
           type: "timing",
           duration: 1500,

@@ -1,11 +1,11 @@
+import LoadingSkeleton from "@/components/ui/loading/LoadingSkeleton";
 import TabTemplate from "@/components/ui/tabs/tabTemplate";
 import React from "react";
-import { Text } from "react-native";
 
 export default function PatientProfiles() {
   return (
-    <TabTemplate headingText="PatientProfiles">
-      <Text>PatientProfiles</Text>
+    <TabTemplate headingText="PatientProfiles" showProfileAvatar={true}>
+      <LoadingSkeleton />
     </TabTemplate>
   );
 }

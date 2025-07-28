@@ -1,4 +1,4 @@
-export default interface SetPatientProfileData {
+export interface SetPatientProfileData {
   // Patient Demographics
   firstName?: string;
   lastName?: string;
@@ -25,3 +25,23 @@ export default interface SetPatientProfileData {
   weight_kg?: number;
   height_cm?: number;
 }
+
+export type PatientProfile = {
+  id: string;
+  profile_id: string;
+  profile_name: string;
+  caregiver_role: string;
+  gender: "Male" | "Female" | "Other"; 
+  dob: string; 
+  first_seizure_date: string; 
+  seizure_types: string[]; 
+  seizure_frequency: string;
+  maintenance_medication: string[];
+  rescue_medication: string[];
+  video_recordings: "Yes" | "No"; 
+  weight_kg: number;
+  height_cm: number;
+  share_code: string | null;
+  created_at: string;
+  updated_at: string;
+};

@@ -1,13 +1,11 @@
 import Logout from "@/app/auth/logout";
+import TabTemplate from "@/components/ui/tabs/tabTemplate";
 import React from "react";
-import { Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Account() {
   return (
-    <SafeAreaView>
-      <Text>Account</Text>
+    <TabTemplate headingText="Account">
       <Logout width="50%" />
-    </SafeAreaView>
+    </TabTemplate>
   );
 }
