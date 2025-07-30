@@ -7,6 +7,7 @@ import {
   PatientProfileWizardSchema,
   PatientProfileWizardValues,
 } from "@/constants/modals/patientProfileModal";
+import { usePatientProfileStore } from "@/store/patientProfileStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -14,6 +15,9 @@ import { FormProvider, useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
 
 export default function NewPatientModal() {
+  const setActivePatientId = usePatientProfileStore(
+    (s) => s.setActivePatientId
+  );
   const createPatientProfile = useCreatePatientProfile();
   const user = useUser();
   const methods = useForm<FormValues>({
@@ -60,14 +64,16 @@ export default function NewPatientModal() {
         if (!user.user) return;
 
         try {
-          await createPatientProfile.mutateAsync({
+          const created = await createPatientProfile.mutateAsync({
             formData: data,
             userId: user.user.id,
           });
+          setActivePatientId(created.id); 
           Toast.show({
             type: "success",
             text1: "Patient profile created",
           });
+
           router.dismiss();
         } catch (err) {
           Toast.show({

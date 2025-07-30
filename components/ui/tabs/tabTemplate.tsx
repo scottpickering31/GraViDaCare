@@ -1,7 +1,8 @@
-import { useGetPatientProfiles } from "@/api/patients/useGetPatientProfiles";
+import { useGetPatientProfile } from "@/api/patients/useGetPatientProfile";
 import ButtonComponent from "@/components/buttons/buttonComponent";
 import { Colors } from "@/constants/styles/Colors";
 import { useAuthStore } from "@/store/authStore";
+import { usePatientProfileStore } from "@/store/patientProfileStore";
 import { Redirect, router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -28,7 +29,7 @@ export default function TabTemplate({
   showProfileAvatar,
 }: TabTemplateProps) {
   const { session } = useAuthStore();
-
+  const { activePatientId } = usePatientProfileStore();
   const fullName = session?.user.user_metadata?.full_name;
   const email = session?.user.email;
 
@@ -52,7 +53,7 @@ export default function TabTemplate({
     refetch,
     isRefetching,
     error,
-  } = useGetPatientProfiles();
+  } = useGetPatientProfile(activePatientId);
 
   const handleRefresh = async () => {
     setRefreshing(true);

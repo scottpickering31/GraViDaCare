@@ -1,24 +1,22 @@
-import { PatientProfileWizardSchema } from "@/constants/modals/patientProfileModal";
 import { useEffect, useState } from "react";
-import { Controller, Path, useFormContext } from "react-hook-form";
+import { Controller, FieldPath, FieldValues, useFormContext } from "react-hook-form";
 import { Text, TextInput } from "react-native";
-import { z } from "zod";
 
-type FormValues = z.infer<typeof PatientProfileWizardSchema>;
-
-type ControlledNumberProps = {
-  name: Path<FormValues>;
+type ControlledNumberProps<T extends FieldValues> = {
+  name: FieldPath<T>;
   label?: string;
 };
 
-export function ControlledNumber({ name, label }: ControlledNumberProps) {
+export function ControlledNumber<T extends FieldValues>({
+  name,
+  label,
+}: ControlledNumberProps<T>) {
   const {
     control,
     formState: { errors },
-  } = useFormContext<FormValues>();
+  } = useFormContext<T>();
 
-  const errorMsg = errors[name]?.message;
-
+  const errorMsg = errors[name]?.message as string | undefined;
   const [input, setInput] = useState("");
 
   return (
@@ -27,9 +25,7 @@ export function ControlledNumber({ name, label }: ControlledNumberProps) {
       control={control}
       name={name}
       render={({ field: { value, onChange } }) => {
-        // 🧠 Sync local state with RHF value + name change
         useEffect(() => {
-          console.log("name:", name, "value from RHF:", value);
           if (typeof value === "number") {
             setInput(value.toString());
           } else {
@@ -57,11 +53,14 @@ export function ControlledNumber({ name, label }: ControlledNumberProps) {
               keyboardType="decimal-pad"
               inputMode="decimal"
               placeholder={label}
-              style={{ borderWidth: 1, borderRadius: 12, padding: 12 }}
+              style={{
+                borderWidth: 1,
+                borderRadius: 12,
+                padding: 12,
+                borderColor: "#ccc",
+              }}
             />
-            {errorMsg && (
-              <Text style={{ color: "red", marginTop: 4 }}>{errorMsg}</Text>
-            )}
+            {errorMsg && <Text style={{ color: "red", marginTop: 4 }}>{errorMsg}</Text>}
           </>
         );
       }}

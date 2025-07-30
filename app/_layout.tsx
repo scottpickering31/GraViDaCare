@@ -10,6 +10,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useEffect } from "react";
 import { View } from "react-native";
 import "react-native-reanimated";
+import Toast from "react-native-toast-message";
 
 WebBrowser.maybeCompleteAuthSession();
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <View style={{ flex: 1 }}>
         <Slot /> {/* renders (/onboarding) or (/tabs) below */}
+        <Toast />
       </View>
     </QueryClientProvider>
   );

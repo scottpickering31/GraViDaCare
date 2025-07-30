@@ -1,27 +1,23 @@
-import { PatientProfileWizardSchema } from "@/constants/modals/patientProfileModal";
-import { Controller, Path, useFormContext } from "react-hook-form";
+import { Controller, FieldPath, FieldValues, useFormContext } from "react-hook-form";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { z } from "zod";
 
-type FormValues = z.infer<typeof PatientProfileWizardSchema>;
-
-type ControlledMultiSelectProps = {
-  name: Path<FormValues>;
+type ControlledMultiSelectProps<T extends FieldValues> = {
+  name: FieldPath<T>;
   label?: string;
   options: string[];
 };
 
-export function ControlledMultiSelect({
+export function ControlledMultiSelect<T extends FieldValues>({
   name,
   label,
   options,
-}: ControlledMultiSelectProps) {
+}: ControlledMultiSelectProps<T>) {
   const {
     control,
     formState: { errors },
-  } = useFormContext<FormValues>();
+  } = useFormContext<T>();
 
-  const errorMsg = errors[name]?.message;
+  const errorMsg = errors[name]?.message as string | undefined;
 
   return (
     <Controller
