@@ -4,6 +4,7 @@ import { Colors } from "@/constants/styles/Colors";
 import { useAuthStore } from "@/store/authStore";
 import { usePatientProfileStore } from "@/store/patientProfileStore";
 import { PatientProfile } from "@/types/patientProfile";
+import { LinearGradient } from "expo-linear-gradient";
 import { Redirect, router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -23,7 +24,7 @@ interface TabTemplateProps {
   showHeadingText?: boolean;
   showProfileAvatar?: boolean;
   accountPage?: boolean;
-  scroll?: boolean;
+  hasAnyPatientProfiles?: boolean;
 }
 
 export default function TabTemplate({
@@ -32,6 +33,7 @@ export default function TabTemplate({
   showHeadingText,
   showProfileAvatar,
   accountPage,
+  hasAnyPatientProfiles,
 }: TabTemplateProps) {
   const { session } = useAuthStore();
   const { activePatientId } = usePatientProfileStore();
@@ -69,60 +71,71 @@ export default function TabTemplate({
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing || isRefetching}
-            onRefresh={handleRefresh}
-          />
-        }
-      >
-        <View style={styles.header}>
-          {showHeadingText !== false && <Text>{headingText}</Text>}
-          {showProfileAvatar && (
-            <Pressable
-              style={styles.profileButton}
-              onPress={() => {
-                router.push("/auth/account");
-              }}
-            >
-              <Text>{upperInitials}</Text>
-            </Pressable>
-          )}
-        </View>
+    <LinearGradient
+      colors={["#f5f7fa", "#e8f0ff", "#ffffff"]}
+      start={{ x: 0.1, y: 0.1 }}
+      end={{ x: 0.9, y: 0.9 }}
+      style={{ flex: 1 }}
+    >
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing || isRefetching}
+              onRefresh={handleRefresh}
+            />
+          }
+        >
+          <View style={styles.header}>
+            {showHeadingText !== false && <Text>{headingText}</Text>}
+            {showProfileAvatar && (
+              <Pressable
+                style={styles.profileButton}
+                onPress={() => {
+                  router.push("/auth/account");
+                }}
+              >
+                <Text>{upperInitials}</Text>
+              </Pressable>
+            )}
+          </View>
 
-        <View style={styles.container}>
-          {isLoading ? (
-            <LoadingSkeleton />
-          ) : error ? (
-            <Text>Error loading data</Text>
-          ) : !patient && !accountPage ? (
-            <View style={styles.buttonContainer}>
-              <ButtonComponent
-                backgroundColor={Colors.primary[500]}
-                textColor="white"
-                title="Create Patient Profile"
-                width="50%"
-                onPress={() => router.push("/(modals)/patientDisclaimerModal")}
-              />
-              <ButtonComponent
-                backgroundColor={Colors.primary[500]}
-                textColor="white"
-                title="View Existing Profile"
-                width="50%"
-                onPress={() => router.push("/(modals)/patientDisclaimerModal")}
-              />
-            </View>
-          ) : (
-            <View>
-              {typeof children === "function" ? children(patient) : children}
-            </View>
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          <View style={styles.container}>
+            {isLoading ? (
+              <LoadingSkeleton />
+            ) : error ? (
+              <Text>Error loading data</Text>
+            ) : !patient && !accountPage && !hasAnyPatientProfiles ? (
+              <View style={styles.buttonContainer}>
+                <ButtonComponent
+                  backgroundColor={Colors.primary[500]}
+                  textColor="white"
+                  title="Create Patient Profile"
+                  width="50%"
+                  onPress={() =>
+                    router.push("/(modals)/patientDisclaimerModal")
+                  }
+                />
+                <ButtonComponent
+                  backgroundColor={Colors.primary[500]}
+                  textColor="white"
+                  title="View Existing Profile"
+                  width="50%"
+                  onPress={() =>
+                    router.push("/(modals)/patientDisclaimerModal")
+                  }
+                />
+              </View>
+            ) : (
+              <View>
+                {typeof children === "function" ? children(patient) : children}
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 

@@ -5,7 +5,7 @@ import { persist } from "zustand/middleware";
 
 type PatientProfileStore = {
   activePatientId: string | null;
-  setActivePatientId: (id: string) => void;
+  setActivePatientId: (id: string | null) => void;
   clear: () => void;
 };
 

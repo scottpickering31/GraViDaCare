@@ -10,7 +10,7 @@ export function useGetPatientProfile(patientId: string | null) {
         .from("patient_profiles")
         .select("*")
         .eq("id", patientId)
-        .single();
+        .maybeSingle();
       if (error) throw error;
       return data;
     },

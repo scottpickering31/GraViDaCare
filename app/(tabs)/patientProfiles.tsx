@@ -1,4 +1,5 @@
 import { useUser } from "@/api/auth/useUser";
+import { useDeletePatientProfile } from "@/api/patients/useDeletePatientProfile";
 import { useGetAllPatientProfiles } from "@/api/patients/useGetAllPatientProfiles";
 import ButtonComponent from "@/components/buttons/buttonComponent";
 import TabTemplate from "@/components/ui/tabs/tabTemplate";
@@ -8,7 +9,7 @@ import { PatientProfile } from "@/types/patientProfile";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function PatientProfiles() {
   const user = useUser();
@@ -24,11 +25,10 @@ export default function PatientProfiles() {
     setActivePatientId(id);
   };
 
+  const deletePatientMutation = useDeletePatientProfile();
+
   return (
-    <TabTemplate
-      headingText="Patient Profiles"
-      showProfileAvatar={true}
-    >
+    <TabTemplate headingText="Patient Profiles" showProfileAvatar={true} hasAnyPatientProfiles={(patients?.length ?? 0) > 0}>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 16,
@@ -59,16 +59,29 @@ export default function PatientProfiles() {
                   />
                 )}
               </View>
-
-              <ButtonComponent
-                title="Use this patient profile"
-                backgroundColor={
-                  isActive ? Colors.primary[700] : Colors.primary[500]
-                }
-                textColor="white"
-                onPress={() => handleSelectPatient(item.id)}
-                width="100%"
-              />
+              <View style={styles.buttonContainer}>
+                {!isActive && (
+                  <ButtonComponent
+                    title="Use this patient profile"
+                    backgroundColor={Colors.primary[500]}
+                    textColor="white"
+                    onPress={() => handleSelectPatient(item.id)}
+                    width="85%"
+                  />
+                )}
+                <Pressable
+                  onPress={() => {
+                    deletePatientMutation.mutate({ profileId: item.id });
+                  }}
+                  style={styles.trashIconWrapper}
+                >
+                  <Ionicons
+                    name="trash-bin"
+                    size={22}
+                    color={Colors.primary[500]}
+                  />
+                </Pressable>
+              </View>
             </View>
           );
         })}
@@ -91,19 +104,30 @@ const styles = StyleSheet.create({
   profileCard: {
     padding: 12,
     borderRadius: 12,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "transparent",
+    borderColor: Colors.gray[200],
     marginBottom: 12,
   },
   activeProfileCard: {
     borderColor: Colors.primary[500],
-    backgroundColor: "#e6f0ff",
+    backgroundColor: "white",
   },
   profileName: {
     fontSize: 16,
     fontWeight: "600",
   },
+  buttonContainer: {
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  trashIconWrapper: {
+    marginLeft: "auto",
+    paddingLeft: 12,
+    paddingRight: 4,
+  },
+
   dob: {
     fontSize: 14,
     color: "#666",
