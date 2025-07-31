@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Account() {
   return (
-    <TabTemplate headingText="Account">
+    <TabTemplate headingText="Account" accountPage={true}>
       <Logout width="50%" />
     </TabTemplate>
   );

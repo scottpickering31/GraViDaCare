@@ -9,7 +9,6 @@ export const useHandleSupabaseSession = () => {
 
   return (session: Session) => {
     setSession(session);
-    console.log("handleSupabaseSession ", JSON.stringify(session, null, 2));
     clearUrl();
     router.replace("/(tabs)/dashboard");
   };

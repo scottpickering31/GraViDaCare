@@ -3,6 +3,7 @@ import ButtonComponent from "@/components/buttons/buttonComponent";
 import { Colors } from "@/constants/styles/Colors";
 import { useAuthStore } from "@/store/authStore";
 import { usePatientProfileStore } from "@/store/patientProfileStore";
+import { PatientProfile } from "@/types/patientProfile";
 import { Redirect, router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -14,12 +15,15 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import LoadingSkeleton from "../loading/LoadingSkeleton";
 
 interface TabTemplateProps {
-  children: React.ReactNode;
+  children: React.ReactNode | ((patient: PatientProfile) => React.ReactNode);
   headingText: string;
   showHeadingText?: boolean;
   showProfileAvatar?: boolean;
+  accountPage?: boolean;
+  scroll?: boolean;
 }
 
 export default function TabTemplate({
@@ -27,9 +31,21 @@ export default function TabTemplate({
   headingText,
   showHeadingText,
   showProfileAvatar,
+  accountPage,
 }: TabTemplateProps) {
   const { session } = useAuthStore();
   const { activePatientId } = usePatientProfileStore();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const {
+    data: patient,
+    isLoading,
+    refetch,
+    isRefetching,
+    error,
+  } = useGetPatientProfile(activePatientId);
+
   const fullName = session?.user.user_metadata?.full_name;
   const email = session?.user.email;
 
@@ -43,23 +59,15 @@ export default function TabTemplate({
 
   const upperInitials = initials ? initials : "";
 
+  // Safe early return after all hooks
   if (!session) return <Redirect href="/onboarding" />;
-
-  const [refreshing, setRefreshing] = useState(false);
-
-  const {
-    data: patients,
-    isLoading,
-    refetch,
-    isRefetching,
-    error,
-  } = useGetPatientProfile(activePatientId);
 
   const handleRefresh = async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
   };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
@@ -84,12 +92,13 @@ export default function TabTemplate({
             </Pressable>
           )}
         </View>
+
         <View style={styles.container}>
           {isLoading ? (
-            <Text>Loading data…</Text>
+            <LoadingSkeleton />
           ) : error ? (
             <Text>Error loading data</Text>
-          ) : patients && patients.length === 0 ? (
+          ) : !patient && !accountPage ? (
             <View style={styles.buttonContainer}>
               <ButtonComponent
                 backgroundColor={Colors.primary[500]}
@@ -107,7 +116,9 @@ export default function TabTemplate({
               />
             </View>
           ) : (
-            <View>{children}</View>
+            <View>
+              {typeof children === "function" ? children(patient) : children}
+            </View>
           )}
         </View>
       </ScrollView>

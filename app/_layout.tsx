@@ -48,13 +48,13 @@ export default function RootLayout() {
   const hydrated = useAuthStore((s) => s.hydrated);
 
   if (!hydrated) {
-    return null; // or splash screen/loading indicator
+    return null; 
   }
 
   return (
     <QueryClientProvider client={queryClient}>
       <View style={{ flex: 1 }}>
-        <Slot /> {/* renders (/onboarding) or (/tabs) below */}
+        <Slot /> 
         <Toast />
       </View>
     </QueryClientProvider>
