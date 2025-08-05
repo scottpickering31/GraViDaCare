@@ -16,25 +16,35 @@ export function useDeletePatientProfile() {
 
       if (error) throw new Error(error.message);
     },
-    onSuccess: (_, variables) => {
-      // Update cache manually (optional)
-      const existingProfiles =
-        queryClient.getQueryData<any[]>(["patient-profiles"]) ?? [];
+    onSuccess: async (_, variables) => {
+      // Fetch latest profiles directly from Supabase
+      const { data: updatedProfilesRaw, error } = await supabase
+        .from("patient_profiles")
+        .select("*")
+        .order("created_at", { ascending: true });
 
-      const updatedProfiles = existingProfiles.filter(
-        (profile) => profile.id !== variables.profileId
-      );
+      if (error) {
+        console.error("Error fetching updated profiles:", error);
+        return;
+      }
 
+      const updatedProfiles = updatedProfilesRaw ?? [];
+
+      console.log("Updated profiles after refetch:", updatedProfiles);
+
+      // Manually update query cache for consistency
       queryClient.setQueryData(["patient-profiles"], updatedProfiles);
 
-      // Invalidate query to refetch fresh data
+      // Invalidate just in case
       queryClient.invalidateQueries({ queryKey: ["patient-profiles"] });
 
-      // Handle active profile switch
+      // Handle switching the active profile
       if (activePatientId === variables.profileId) {
         if (updatedProfiles.length > 0) {
+          console.log("Setting activePatientId to:", updatedProfiles[0].id);
           setActivePatientId(updatedProfiles[0].id);
         } else {
+          console.log("No profiles left, setting activePatientId to null");
           setActivePatientId(null);
         }
       }
@@ -45,12 +55,6 @@ export function useDeletePatientProfile() {
         text2: updatedProfiles.length
           ? `Now using: ${updatedProfiles[0].profile_name}`
           : "No profiles left. Please create a new one.",
-      });
-    },
-    onError: () => {
-      Toast.show({
-        type: "error",
-        text1: "Failed to delete patient profile",
       });
     },
   });

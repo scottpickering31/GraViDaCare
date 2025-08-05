@@ -28,8 +28,13 @@ export default function PatientProfiles() {
   const deletePatientMutation = useDeletePatientProfile();
 
   return (
-    <TabTemplate headingText="Patient Profiles" showProfileAvatar={true} hasAnyPatientProfiles={(patients?.length ?? 0) > 0}>
+    <TabTemplate
+      headingText="Patient Profiles"
+      showProfileAvatar={true}
+      hasAnyPatientProfiles={(patients?.length ?? 0) > 0}
+    >
       <ScrollView
+        persistentScrollbar={true}
         contentContainerStyle={{
           paddingHorizontal: 16,
           paddingTop: 12,
@@ -39,48 +44,60 @@ export default function PatientProfiles() {
         {(patients ?? []).map((item: PatientProfile) => {
           const isActive = item.id === activePatientId;
           return (
-            <View
-              key={item.id}
-              style={[
-                styles.profileCard,
-                isActive ? styles.activeProfileCard : null,
-              ]}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.profileName}>{item.profile_name}</Text>
-                  <Text style={styles.dob}>DOB: {item.dob ?? "Unknown"}</Text>
+            <View key={item.id} style={styles.profileCardWrapper}>
+              <View
+                style={[
+                  styles.profileCard,
+                  isActive && styles.activeProfileCard,
+                ]}
+              >
+                <View style={styles.profileHeader}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.profileName}>{item.profile_name}</Text>
+                    <Text style={styles.dob}>DOB: {item.dob ?? "Unknown"}</Text>
+                  </View>
+                  {isActive && (
+                    <Ionicons
+                      name="checkmark-circle"
+                      size={24}
+                      color={Colors.primary[500]}
+                      style={styles.icon}
+                    />
+                  )}
                 </View>
-                {isActive && (
-                  <Ionicons
-                    name="checkmark-circle"
-                    size={24}
-                    color={Colors.primary[500]}
-                  />
-                )}
+
+                <View style={styles.buttonContainer}>
+                  {!isActive && (
+                    <ButtonComponent
+                      title="Use this profile"
+                      backgroundColor={Colors.primary[500]}
+                      textColor="white"
+                      onPress={() => handleSelectPatient(item.id)}
+                      width="70%"
+                    />
+                  )}
+                  <Pressable
+                    onPress={() => {
+                      deletePatientMutation.mutate({ profileId: item.id });
+                    }}
+                    style={styles.trashIconWrapper}
+                  >
+                    <Ionicons
+                      name="trash-bin"
+                      size={22}
+                      color={Colors.primary[500]}
+                    />
+                  </Pressable>
+                </View>
               </View>
-              <View style={styles.buttonContainer}>
-                {!isActive && (
-                  <ButtonComponent
-                    title="Use this patient profile"
-                    backgroundColor={Colors.primary[500]}
-                    textColor="white"
-                    onPress={() => handleSelectPatient(item.id)}
-                    width="85%"
-                  />
-                )}
-                <Pressable
-                  onPress={() => {
-                    deletePatientMutation.mutate({ profileId: item.id });
-                  }}
-                  style={styles.trashIconWrapper}
-                >
-                  <Ionicons
-                    name="trash-bin"
-                    size={22}
-                    color={Colors.primary[500]}
-                  />
-                </Pressable>
+
+              <View style={styles.shareBar}>
+                <Text style={styles.shareText}>Share Profile</Text>
+                <View style={{ flexDirection: "row", gap: 12 }}>
+                  <Ionicons name="share" size={22} color="black" />
+                  <Ionicons name="logo-whatsapp" size={22} color="green" />
+                  <Ionicons name="mail" size={22} color="blue" />
+                </View>
               </View>
             </View>
           );
@@ -101,35 +118,66 @@ export default function PatientProfiles() {
 }
 
 const styles = StyleSheet.create({
+  profileCardWrapper: {
+    marginBottom: 16,
+    borderRadius: 16,
+    overflow: "hidden",
+    backgroundColor: Colors.gray[100],
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
+    borderWidth: 1,
+  },
   profileCard: {
-    padding: 12,
-    borderRadius: 12,
+    padding: 16,
     backgroundColor: "white",
-    borderWidth: 2,
-    borderColor: Colors.gray[200],
-    marginBottom: 12,
   },
   activeProfileCard: {
-    borderColor: Colors.primary[500],
-    backgroundColor: "white",
+    borderLeftWidth: 4,
+    borderLeftColor: Colors.primary[500],
   },
-  profileName: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  buttonContainer: {
-    marginTop: 10,
+  profileHeader: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 8,
   },
-  trashIconWrapper: {
-    marginLeft: "auto",
-    paddingLeft: 12,
-    paddingRight: 4,
+  profileName: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#1a1a1a",
   },
-
   dob: {
     fontSize: 14,
     color: "#666",
+    marginTop: 2,
+  },
+  icon: {
+    marginLeft: 8,
+  },
+  buttonContainer: {
+    marginTop: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  trashIconWrapper: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: Colors.gray[200],
+  },
+  shareBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: Colors.gray[300],
+  },
+  shareText: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#444",
   },
 });

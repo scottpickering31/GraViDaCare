@@ -68,10 +68,10 @@ export default function NewPatientModal() {
             formData: data,
             userId: user.user.id,
           });
-          setActivePatientId(created.id); 
+          setActivePatientId(created.id);
           Toast.show({
             type: "success",
-            text1: "Patient profile created",
+            text1: `Profile "${created.profile_name}" created`,
           });
 
           router.dismiss();
