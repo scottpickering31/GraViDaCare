@@ -24,7 +24,7 @@ export function useCreatePatientProfile() {
     },
     onSuccess: (_data, _variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["patient-profile", _variables.userId],
+        queryKey: ["patient-profiles", _variables.userId],
       });
     },
   });

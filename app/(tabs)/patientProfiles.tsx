@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   shareText: {
     fontSize: 14,
-    fontWeight: "500",
-    color: "#444",
+    fontWeight: "bold",
+    color: Colors.dark[500],
   },
 });
