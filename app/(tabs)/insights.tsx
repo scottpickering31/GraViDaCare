@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 
 export default function Insights() {
   return (
-    <TabTemplate headingText="Insights" showProfileAvatar={true} scroll={true}>
+    <TabTemplate headingText="Insights" showProfileAvatar={true}>
       <View>
         <Text>Insights</Text>
       </View>

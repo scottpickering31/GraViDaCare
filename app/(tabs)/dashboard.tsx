@@ -11,7 +11,6 @@ export default function DashboardGate() {
       headingText="Dashboard"
       showHeadingText={false}
       showProfileAvatar={true}
-      scroll={true}
     >
       {(patient) => (
         <View style={{ padding: 16 }}>

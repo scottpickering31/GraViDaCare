@@ -16,5 +16,6 @@ export function useGetAllPatientProfiles(userId: string | null) {
       return data;
     },
     enabled: !!userId,
+    staleTime: 1000 * 60 * 5,
   });
 }
