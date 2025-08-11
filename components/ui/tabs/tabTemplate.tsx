@@ -128,7 +128,7 @@ export default function TabTemplate({
                 />
               </View>
             ) : (
-              <View>
+              <View style={{ flex: 1 }}>
                 {typeof children === "function" ? children(patient) : children}
               </View>
             )}
@@ -142,7 +142,6 @@ export default function TabTemplate({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
   },
   profileButton: {
     borderRadius: 180,
