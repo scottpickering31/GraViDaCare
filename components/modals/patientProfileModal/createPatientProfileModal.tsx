@@ -6,10 +6,13 @@ import {
 } from "@/constants/modals/patientProfileModal";
 import { Colors } from "@/constants/styles/Colors";
 import AnimatedProgressCircle from "@/constants/styles/progressCircle";
-import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import React, { useState } from "react";
 import {
   Image,
   Modal,
+  Pressable,
   StyleProp,
   StyleSheet,
   Text,
@@ -27,7 +30,6 @@ interface Props {
   isLast: boolean;
 }
 
-// createPatientProfileModal.tsx
 export default function CreatePatientProfileModal({
   headingText,
   onNextPress,
@@ -36,26 +38,47 @@ export default function CreatePatientProfileModal({
   canGoBack,
   currentStep,
 }: Props) {
+  const [isFieldFocused, setIsFieldFocused] = useState(false);
   return (
     <Modal animationType="slide" transparent>
       <View style={styles.overlay}>
         <View style={styles.card}>
+          <View style={{ position: "absolute", right: 3, padding: 5 }}>
+            <Pressable
+              onPress={() => {
+                router.back();
+              }}
+            >
+              <Ionicons
+                name="close-circle"
+                size={30}
+                color={Colors.primary[500]}
+              />
+            </Pressable>
+          </View>
           <View style={styles.progress}>
             <Image
               source={require("@/assets/icons/GraViDaCareLogo.png")}
               style={{ height: 150, width: 150 }}
             />
-            <AnimatedProgressCircle
-              step={currentStep.step}
-              totalSteps={PatientProfileModalSteps.length}
-            />
           </View>
           <View style={styles.innerCard}>
+            {!isFieldFocused && (
+              <View style={{ position: "absolute", top: 180 }}>
+                <AnimatedProgressCircle
+                  step={currentStep.step}
+                  totalSteps={PatientProfileModalSteps.length}
+                />
+              </View>
+            )}
             <View>
               <Text style={styles.headingText}>{headingText}</Text>
             </View>
             <View style={styles.form}>
-              <ControlledField step={currentStep} />
+              <ControlledField
+                step={currentStep}
+                onFieldFocusChange={setIsFieldFocused}
+              />
             </View>
           </View>
           <View style={styles.navigationButtons}>
@@ -103,16 +126,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 10,
-    flex: 1,
+    flex: 4,
     margin: 15,
   },
   progress: {
     position: "absolute",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
     width: "100%",
-    padding: 10,
   },
   headingText: { fontSize: 18, fontWeight: "700", textAlign: "center" },
   input: {

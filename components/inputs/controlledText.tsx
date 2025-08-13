@@ -1,4 +1,9 @@
-import { Controller, FieldPath, FieldValues, useFormContext } from "react-hook-form";
+import {
+  Controller,
+  FieldPath,
+  FieldValues,
+  useFormContext,
+} from "react-hook-form";
 import { Text, TextInput } from "react-native";
 
 type ControlledTextProps<T extends FieldValues> = {
@@ -13,7 +18,10 @@ export function ControlledText<T extends FieldValues>({
   label,
   multiline,
   keyboardType = "default",
-}: ControlledTextProps<T>) {
+  onFieldFocusChange,
+}: ControlledTextProps<T> & {
+  onFieldFocusChange?: (focused: boolean) => void;
+}) {
   const {
     control,
     formState: { errors },
@@ -34,6 +42,8 @@ export function ControlledText<T extends FieldValues>({
             keyboardType={keyboardType}
             placeholder={label}
             placeholderTextColor="gray"
+            onFocus={() => onFieldFocusChange?.(true)}
+            onBlur={() => onFieldFocusChange?.(false)}
             style={{
               borderWidth: 1,
               borderColor: "#ccc",
@@ -44,7 +54,9 @@ export function ControlledText<T extends FieldValues>({
           />
         )}
       />
-      {errorMsg && <Text style={{ color: "red", marginTop: 4 }}>{errorMsg}</Text>}
+      {errorMsg && (
+        <Text style={{ color: "red", marginTop: 4 }}>{errorMsg}</Text>
+      )}
     </>
   );
 }

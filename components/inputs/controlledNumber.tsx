@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { Controller, FieldPath, FieldValues, useFormContext } from "react-hook-form";
+import {
+  Controller,
+  FieldPath,
+  FieldValues,
+  useFormContext,
+} from "react-hook-form";
 import { Text, TextInput } from "react-native";
 
 type ControlledNumberProps<T extends FieldValues> = {
@@ -10,7 +15,10 @@ type ControlledNumberProps<T extends FieldValues> = {
 export function ControlledNumber<T extends FieldValues>({
   name,
   label,
-}: ControlledNumberProps<T>) {
+  onFieldFocusChange,
+}: ControlledNumberProps<T> & {
+  onFieldFocusChange?: (focused: boolean) => void;
+}) {
   const {
     control,
     formState: { errors },
@@ -53,6 +61,8 @@ export function ControlledNumber<T extends FieldValues>({
               keyboardType="decimal-pad"
               inputMode="decimal"
               placeholder={label}
+              onFocus={() => onFieldFocusChange?.(true)}
+              onBlur={() => onFieldFocusChange?.(false)}
               style={{
                 borderWidth: 1,
                 borderRadius: 12,
@@ -60,7 +70,9 @@ export function ControlledNumber<T extends FieldValues>({
                 borderColor: "#ccc",
               }}
             />
-            {errorMsg && <Text style={{ color: "red", marginTop: 4 }}>{errorMsg}</Text>}
+            {errorMsg && (
+              <Text style={{ color: "red", marginTop: 4 }}>{errorMsg}</Text>
+            )}
           </>
         );
       }}
