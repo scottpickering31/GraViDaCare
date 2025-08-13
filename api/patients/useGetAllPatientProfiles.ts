@@ -10,7 +10,8 @@ export function useGetAllPatientProfiles(userId: string | null) {
       const { data, error } = await supabase
         .from("patient_profiles")
         .select("*")
-        .eq("profile_id", userId);
+        .eq("profile_id", userId)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return data;

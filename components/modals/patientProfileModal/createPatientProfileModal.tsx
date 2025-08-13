@@ -8,9 +8,10 @@ import { Colors } from "@/constants/styles/Colors";
 import AnimatedProgressCircle from "@/constants/styles/progressCircle";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
+  Keyboard,
   Modal,
   Pressable,
   StyleProp,
@@ -39,6 +40,16 @@ export default function CreatePatientProfileModal({
   currentStep,
 }: Props) {
   const [isFieldFocused, setIsFieldFocused] = useState(false);
+
+  useEffect(() => {
+    const hideSub = Keyboard.addListener("keyboardDidHide", () => {
+      setIsFieldFocused(false);
+    });
+    return () => {
+      hideSub.remove();
+    };
+  }, []);
+
   return (
     <Modal animationType="slide" transparent>
       <View style={styles.overlay}>
@@ -63,14 +74,19 @@ export default function CreatePatientProfileModal({
             />
           </View>
           <View style={styles.innerCard}>
-            {!isFieldFocused && (
-              <View style={{ position: "absolute", top: 180 }}>
-                <AnimatedProgressCircle
-                  step={currentStep.step}
-                  totalSteps={PatientProfileModalSteps.length}
-                />
-              </View>
-            )}
+            <View
+              style={{
+                position: "absolute",
+                top: 180,
+                opacity: isFieldFocused ? 0 : 1,
+              }}
+            >
+              <AnimatedProgressCircle
+                step={currentStep.step}
+                totalSteps={PatientProfileModalSteps.length}
+              />
+            </View>
+
             <View>
               <Text style={styles.headingText}>{headingText}</Text>
             </View>

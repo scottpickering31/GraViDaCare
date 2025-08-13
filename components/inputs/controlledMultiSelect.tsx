@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useFieldFocusStore } from "@/store/fieldFocusStore";
+import { useEffect } from "react";
 import {
   Controller,
   FieldPath,
@@ -11,7 +12,7 @@ type ControlledMultiSelectProps<T extends FieldValues> = {
   name: FieldPath<T>;
   label?: string;
   options: string[];
-  onFieldFocusChange?: (focused: boolean) => void; // 🔹 added
+  onFieldFocusChange?: (focused: boolean) => void;
 };
 
 export function ControlledMultiSelect<T extends FieldValues>({
@@ -25,8 +26,26 @@ export function ControlledMultiSelect<T extends FieldValues>({
     formState: { errors },
   } = useFormContext<T>();
 
-  const [isOpen, setIsOpen] = useState(false); // 🔹 track open/closed state
+  const { focusedField, setFocusedField } = useFieldFocusStore();
   const errorMsg = errors[name]?.message as string | undefined;
+
+  const isOpen = focusedField === name;
+
+  useEffect(() => {
+    if (!isOpen) {
+      handleClose();
+    }
+  }, [isOpen]);
+
+  const handleOpen = () => {
+    setFocusedField(name);
+    onFieldFocusChange?.(true);
+  };
+
+  const handleClose = () => {
+    setFocusedField(null);
+    onFieldFocusChange?.(false);
+  };
 
   return (
     <Controller
@@ -39,18 +58,7 @@ export function ControlledMultiSelect<T extends FieldValues>({
           const updated = selectedValues.includes(option)
             ? selectedValues.filter((v) => v !== option)
             : [...selectedValues, option];
-
           onChange(updated);
-        };
-
-        const handleOpen = () => {
-          setIsOpen(true);
-          onFieldFocusChange?.(true); // 🔹 notify focus
-        };
-
-        const handleClose = () => {
-          setIsOpen(false);
-          onFieldFocusChange?.(false); // 🔹 notify blur
         };
 
         return (
@@ -74,7 +82,11 @@ export function ControlledMultiSelect<T extends FieldValues>({
             )}
 
             {isOpen && (
-              <ScrollView style={{ maxHeight: 300 }} persistentScrollbar>
+              <ScrollView
+                style={{ maxHeight: 300 }}
+                persistentScrollbar
+                keyboardShouldPersistTaps="handled"
+              >
                 {options.map((opt) => {
                   const isSelected = selectedValues.includes(opt);
                   return (
@@ -94,10 +106,6 @@ export function ControlledMultiSelect<T extends FieldValues>({
                     </TouchableOpacity>
                   );
                 })}
-
-                <TouchableOpacity onPress={handleClose} style={{ padding: 12 }}>
-                  <Text style={{ color: "red" }}>Done</Text>
-                </TouchableOpacity>
               </ScrollView>
             )}
 

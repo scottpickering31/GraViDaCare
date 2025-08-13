@@ -1,7 +1,4 @@
-// screens/DashboardGate.tsx
-
 import TabTemplate from "@/components/ui/tabs/tabTemplate";
-
 import React from "react";
 import { Text, View } from "react-native";
 

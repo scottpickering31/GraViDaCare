@@ -22,7 +22,7 @@ const { width } = Dimensions.get("window");
 
 export default function PatientProfiles() {
   const user = useUser();
-  const { data: patients = [] } = useGetAllPatientProfiles(
+  const { data: patients = [], refetch } = useGetAllPatientProfiles(
     user.user?.id ?? null
   );
   const activePatientId = usePatientProfileStore(
@@ -134,6 +134,8 @@ export default function PatientProfiles() {
       headingText="Patient Profiles"
       showProfileAvatar={true}
       hasAnyPatientProfiles={patients.length > 0}
+      patientData={patients}
+      refetchFn={refetch}
     >
       {patients.length > 0 ? (
         <View style={{ flex: 1 }}>

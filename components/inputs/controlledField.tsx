@@ -35,7 +35,13 @@ export function ControlledField<T extends FieldValues>({
         />
       );
     case "date":
-      return <ControlledDatePicker<T> name={name} label={step.placeholder} />;
+      return (
+        <ControlledDatePicker<T>
+          name={name}
+          label={step.placeholder}
+          {...sharedProps}
+        />
+      );
     case "selector":
       return (
         <ControlledSelect<T>

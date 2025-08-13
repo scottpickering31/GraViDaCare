@@ -25,6 +25,10 @@ interface TabTemplateProps {
   showProfileAvatar?: boolean;
   accountPage?: boolean;
   hasAnyPatientProfiles?: boolean;
+  patientData?: PatientProfile | PatientProfile[];
+  refetchFn?: () => Promise<any>;
+  isLoading?: boolean;
+  error?: any;
 }
 
 export default function TabTemplate({
@@ -34,23 +38,41 @@ export default function TabTemplate({
   showProfileAvatar,
   accountPage,
   hasAnyPatientProfiles,
+  patientData: data,
+  refetchFn,
+  isLoading: externalLoading,
+  error: externalError,
 }: TabTemplateProps) {
   const { session } = useAuthStore();
   const { activePatientId } = usePatientProfileStore();
-
   const [refreshing, setRefreshing] = useState(false);
 
   const {
     data: patient,
-    isLoading,
+    isLoading: internalLoading,
     refetch,
     isRefetching,
     error,
   } = useGetPatientProfile(activePatientId);
 
+  const isLoading = externalLoading ?? internalLoading;
+  const dataToRender = data ?? patient;
+  const errorToRender = externalError ?? error;
+
+  if (!session) return <Redirect href="/onboarding" />;
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    if (refetchFn) {
+      await refetchFn();
+    } else {
+      await refetch();
+    }
+    setRefreshing(false);
+  };
+
   const fullName = session?.user.user_metadata?.full_name;
   const email = session?.user.email;
-
   const initials = fullName
     ? fullName
         .split(" ")
@@ -58,17 +80,10 @@ export default function TabTemplate({
         .join("")
         .toUpperCase()
     : email?.[0]?.toUpperCase();
+  const upperInitials = initials ?? "";
 
-  const upperInitials = initials ? initials : "";
-
-  // Safe early return after all hooks
-  if (!session) return <Redirect href="/onboarding" />;
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
-  };
+  console.log("Active patient ID:", activePatientId);
+  console.log("Patient data:", patient);
 
   return (
     <LinearGradient
@@ -92,9 +107,7 @@ export default function TabTemplate({
             {showProfileAvatar && (
               <Pressable
                 style={styles.profileButton}
-                onPress={() => {
-                  router.push("/auth/account");
-                }}
+                onPress={() => router.push("/auth/account")}
               >
                 <Text>{upperInitials}</Text>
               </Pressable>
@@ -104,9 +117,9 @@ export default function TabTemplate({
           <View style={styles.container}>
             {isLoading ? (
               <LoadingSkeleton />
-            ) : error ? (
+            ) : errorToRender ? (
               <Text>Error loading data</Text>
-            ) : !patient && !accountPage && !hasAnyPatientProfiles ? (
+            ) : !dataToRender && !accountPage && !hasAnyPatientProfiles ? (
               <View style={styles.buttonContainer}>
                 <ButtonComponent
                   backgroundColor={Colors.primary[500]}
@@ -129,7 +142,9 @@ export default function TabTemplate({
               </View>
             ) : (
               <View style={{ flex: 1 }}>
-                {typeof children === "function" ? children(patient) : children}
+                {typeof children === "function"
+                  ? children(dataToRender)
+                  : children}
               </View>
             )}
           </View>

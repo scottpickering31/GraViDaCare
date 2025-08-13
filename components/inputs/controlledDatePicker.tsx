@@ -1,16 +1,23 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
-import { Controller, useFormContext, FieldPath, FieldValues } from "react-hook-form";
+import {
+  Controller,
+  FieldPath,
+  FieldValues,
+  useFormContext,
+} from "react-hook-form";
 import { Button, Platform, Text, View } from "react-native";
 
 type ControlledDatePickerProps<T extends FieldValues> = {
   name: FieldPath<T>;
   label?: string;
+  onFieldFocusChange?: (focused: boolean) => void; // 👈 added
 };
 
 export function ControlledDatePicker<T extends FieldValues>({
   name,
   label,
+  onFieldFocusChange,
 }: ControlledDatePickerProps<T>) {
   const {
     control,
@@ -19,6 +26,16 @@ export function ControlledDatePicker<T extends FieldValues>({
 
   const errorMsg = errors[name]?.message as string | undefined;
   const [show, setShow] = useState(false);
+
+  const openPicker = () => {
+    setShow(true);
+    onFieldFocusChange?.(true); // 👈 hide circle when picker opens
+  };
+
+  const closePicker = () => {
+    setShow(false);
+    onFieldFocusChange?.(false); // 👈 show circle when picker closes
+  };
 
   return (
     <Controller
@@ -30,7 +47,7 @@ export function ControlledDatePicker<T extends FieldValues>({
           : "Select date";
         return (
           <View style={{ marginVertical: 8 }}>
-            <Button title={label ?? displayDate} onPress={() => setShow(true)} />
+            <Button title={label ?? displayDate} onPress={openPicker} />
 
             {show && (
               <DateTimePicker
@@ -38,7 +55,7 @@ export function ControlledDatePicker<T extends FieldValues>({
                 mode="date"
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={(_, selectedDate) => {
-                  setShow(false);
+                  closePicker();
                   if (selectedDate) {
                     const isoDate = selectedDate.toISOString();
                     onChange(isoDate);

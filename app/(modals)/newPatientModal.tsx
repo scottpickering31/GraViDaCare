@@ -7,6 +7,7 @@ import {
   PatientProfileWizardSchema,
   PatientProfileWizardValues,
 } from "@/constants/modals/patientProfileModal";
+import { useFieldFocusStore } from "@/store/fieldFocusStore";
 import { usePatientProfileStore } from "@/store/patientProfileStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
@@ -27,6 +28,7 @@ export default function NewPatientModal() {
   });
 
   const [step, setStep] = useState(0);
+  const { focusedField, setFocusedField } = useFieldFocusStore();
   const currentStep = PatientProfileModalSteps[step];
   const isLast = step === PatientProfileModalSteps.length - 1;
   const canGoBack = step > 0;
@@ -53,6 +55,10 @@ export default function NewPatientModal() {
 
   /** NEXT / SUBMIT */
   const handleNext = async () => {
+    if (focusedField) {
+      setFocusedField(null);
+      return;
+    }
     const isValid = await validateCurrentStep();
     if (!isValid) return;
 

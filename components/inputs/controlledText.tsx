@@ -43,7 +43,6 @@ export function ControlledText<T extends FieldValues>({
             placeholder={label}
             placeholderTextColor="gray"
             onFocus={() => onFieldFocusChange?.(true)}
-            onBlur={() => onFieldFocusChange?.(false)}
             style={{
               borderWidth: 1,
               borderColor: "#ccc",
